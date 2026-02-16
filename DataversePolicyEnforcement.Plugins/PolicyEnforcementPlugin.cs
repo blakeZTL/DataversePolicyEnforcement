@@ -49,14 +49,14 @@ namespace DataversePolicyEnforcement.Plugins
             if (
                 context.MessageName == "Update"
                 && !context.PreEntityImages.TryGetValue(PreImageName, out preImage)
-                && preImage != null
+                && preImage == null
             )
             {
                 throw new InvalidPluginExecutionException(
                     $"Pre-Image named {PreImageName} required on update"
                 );
             }
-
+            tracer.Trace("Plugin Resources validated");
             #endregion
 
             try
@@ -73,11 +73,13 @@ namespace DataversePolicyEnforcement.Plugins
                     tracer.Trace("No attributes to govern. Exiting.");
                     return;
                 }
+                tracer.Trace($"Governed attributes: {governedAttributes.Count}");
 
                 var evaluator = new PolicyEvaluator(policyCollection);
 
                 foreach (var attr in governedAttributes)
                 {
+                    tracer.Trace($"Evaluating {attr}");
                     var isCreate = context.MessageName == "Create";
                     var isUpdate = context.MessageName == "Update";
 
@@ -86,6 +88,7 @@ namespace DataversePolicyEnforcement.Plugins
                     #region Update
                     if (isUpdate && inTarget)
                     {
+                        tracer.Trace("Evaluating in context of an update message");
                         var decision = evaluator.EvaluateAttribute(
                             systemService,
                             target.LogicalName,
@@ -96,6 +99,7 @@ namespace DataversePolicyEnforcement.Plugins
 
                         if (decision.ServerDetails.NotAllowed)
                         {
+                            tracer.Trace("Server: Not allowed");
                             var newValue = target[attr];
                             var oldValue = preImage.Attributes.ContainsKey(attr)
                                 ? preImage[attr]
@@ -111,6 +115,7 @@ namespace DataversePolicyEnforcement.Plugins
 
                         if (decision.ServerDetails.Required)
                         {
+                            tracer.Trace("Server: required");
                             var newValue =
                                 target[attr]
                                 ?? throw new InvalidPluginExecutionException(
@@ -124,6 +129,7 @@ namespace DataversePolicyEnforcement.Plugins
                     #region Create
                     if (isCreate)
                     {
+                        tracer.Trace("Evaluating in context of a create message");
                         var decision = evaluator.EvaluateAttribute(
                             systemService,
                             target.LogicalName,
@@ -149,7 +155,7 @@ namespace DataversePolicyEnforcement.Plugins
                         )
                         {
                             throw new InvalidPluginExecutionException(
-                                $"Change blocked by policy: {target.LogicalName}.{attr} is not allowed to be set."
+                                $"Creation blocked by policy: {target.LogicalName}.{attr} is not allowed to be set."
                             );
                         }
                     }
