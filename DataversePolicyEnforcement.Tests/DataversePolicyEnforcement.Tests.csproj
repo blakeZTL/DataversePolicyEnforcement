@@ -135,12 +135,18 @@
   <ItemGroup>
     <Compile Include="Core\Comparison\ConditionTests.cs" />
     <Compile Include="Core\Data\PolicyCollectionTests.cs" />
+    <Compile Include="Core\Evaluation\Helpers.cs" />
+    <Compile Include="Core\Evaluation\PolicyEvaluatorTests.cs" />
     <Compile Include="Core\Evaluation\PolicyScopeEvaluatorTests.cs" />
     <Compile Include="FakeXrmEasyTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Core\Comparison\README.md" />
+    <None Include="Core\Data\README.md" />
+    <None Include="Core\Evaluation\README.md" />
+    <None Include="Core\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

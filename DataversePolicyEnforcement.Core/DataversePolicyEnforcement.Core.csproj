@@ -100,16 +100,21 @@
     <Compile Include="Data\PolicyCollection.cs" />
     <Compile Include="Evaluation\IPolicyEvaluator.cs" />
     <Compile Include="Evaluation\IPolicyScopeEvaluator.cs" />
-    <Compile Include="Evaluation\PolicyDecision.cs" />
-    <Compile Include="Evaluation\PolicyDetails.cs" />
+    <Compile Include="Model\PolicyDecision.cs" />
+    <Compile Include="Model\PolicyDetails.cs" />
     <Compile Include="Evaluation\PolicyEvaluator.cs" />
     <Compile Include="Evaluation\PolicyScopeEvaluation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Comparison\README.md" />
+    <None Include="Data\README.md" />
     <None Include="dpe.snk" />
+    <None Include="Evaluation\README.md" />
+    <None Include="Model\README.md" />
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataversePolicyEnforcement.Models\DataversePolicyEnforcement.Models.csproj">

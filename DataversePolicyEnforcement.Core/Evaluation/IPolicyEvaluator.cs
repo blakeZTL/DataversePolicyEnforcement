@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using DataversePolicyEnforcement.Core.Model;
+using Microsoft.Xrm.Sdk;
 
 namespace DataversePolicyEnforcement.Core.Evaluation
 {

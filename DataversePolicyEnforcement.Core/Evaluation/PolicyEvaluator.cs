@@ -1,4 +1,5 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
+using DataversePolicyEnforcement.Core.Model;
 using DataversePolicyEnforcement.Models.OptionSets;
 using Microsoft.Xrm.Sdk;
 using System;
@@ -24,14 +25,10 @@ namespace DataversePolicyEnforcement.Core.Evaluation
             Entity preImage
         )
         {
-            if (service == null)
-                throw new ArgumentNullException(nameof(service));
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-            if (preImage == null)
-                throw new ArgumentNullException(nameof(preImage));
-
             var decision = new PolicyDecision();
+
+            if (service == null || target == null)
+                return decision;
 
             var rules = _policyCollection.GetRules(
                 service,
