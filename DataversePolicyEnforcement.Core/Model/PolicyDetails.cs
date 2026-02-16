@@ -1,4 +1,4 @@
-﻿namespace DataversePolicyEnforcement.Core.Evaluation
+﻿namespace DataversePolicyEnforcement.Core.Model
 {
     public sealed class ClientPolicyDetails
     {

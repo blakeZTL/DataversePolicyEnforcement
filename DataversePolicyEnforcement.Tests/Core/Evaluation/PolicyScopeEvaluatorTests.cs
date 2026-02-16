@@ -1,5 +1,6 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
 using DataversePolicyEnforcement.Core.Evaluation;
+using DataversePolicyEnforcement.Core.Model;
 using DataversePolicyEnforcement.Models.Entities;
 using FakeXrmEasy.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

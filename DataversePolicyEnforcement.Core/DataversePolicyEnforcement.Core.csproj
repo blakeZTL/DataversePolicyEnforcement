@@ -100,8 +100,8 @@
     <Compile Include="Data\PolicyCollection.cs" />
     <Compile Include="Evaluation\IPolicyEvaluator.cs" />
     <Compile Include="Evaluation\IPolicyScopeEvaluator.cs" />
-    <Compile Include="Evaluation\PolicyDecision.cs" />
-    <Compile Include="Evaluation\PolicyDetails.cs" />
+    <Compile Include="Model\PolicyDecision.cs" />
+    <Compile Include="Model\PolicyDetails.cs" />
     <Compile Include="Evaluation\PolicyEvaluator.cs" />
     <Compile Include="Evaluation\PolicyScopeEvaluation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
