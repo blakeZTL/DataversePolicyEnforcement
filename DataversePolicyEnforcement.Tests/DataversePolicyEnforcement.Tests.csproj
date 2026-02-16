@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Comparison\ConditionTests.cs" />
+    <Compile Include="Core\Data\MetadataValidatorTests.cs" />
     <Compile Include="Core\Data\PolicyCollectionTests.cs" />
     <Compile Include="Helpers\ConditionHelpers.cs" />
     <Compile Include="Core\Evaluation\PolicyEvaluatorTests.cs" />
