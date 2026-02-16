@@ -2,6 +2,7 @@
 using DataversePolicyEnforcement.Core.Evaluation;
 using DataversePolicyEnforcement.Core.Model;
 using DataversePolicyEnforcement.Models.Entities;
+using DataversePolicyEnforcement.Tests.Helpers;
 using FakeXrmEasy.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -23,7 +24,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         protected dpe_PolicyCondition _metCondition;
         protected dpe_PolicyCondition _notMetCondition;
         protected PolicyEvaluator _evaluator;
-        protected Helpers _helpers;
+        protected ConditionHelpers _helpers;
         protected PolicyDecision _decision = new PolicyDecision();
 
         public PolicyEvaluatorTestsBase()
@@ -100,7 +101,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
 
             _evaluator = new PolicyEvaluator(_policyCollection);
 
-            _helpers = new Helpers(_context, _metCondition, _notMetCondition);
+            _helpers = new ConditionHelpers(_context, _metCondition, _notMetCondition);
         }
     }
 
