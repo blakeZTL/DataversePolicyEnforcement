@@ -158,6 +158,10 @@
       <Project>{ffba5cb4-f326-4dea-bccb-7f0cf229fa1c}</Project>
       <Name>DataversePolicyEnforcement.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataversePolicyEnforcement.Plugins\DataversePolicyEnforcement.Plugins.csproj">
+      <Project>{475eca96-8b8f-42e9-bd2e-a91d708f6f9c}</Project>
+      <Name>DataversePolicyEnforcement.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

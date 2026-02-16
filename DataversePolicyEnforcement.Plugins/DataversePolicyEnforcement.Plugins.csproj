@@ -78,6 +78,16 @@
   <ItemGroup>
     <None Include="dpe.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataversePolicyEnforcement.Core\DataversePolicyEnforcement.Core.csproj">
+      <Project>{338ec228-19b6-4e04-8124-0eeb99884886}</Project>
+      <Name>DataversePolicyEnforcement.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataversePolicyEnforcement.Models\DataversePolicyEnforcement.Models.csproj">
+      <Project>{ffba5cb4-f326-4dea-bccb-7f0cf229fa1c}</Project>
+      <Name>DataversePolicyEnforcement.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Target Name="GetTfmPublishedFiles">
     <Message Text="GetTfmPublishedFiles from: $(OutputPath)" />
     <ItemGroup>
