@@ -1,4 +1,8 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using DataversePolicyEnforcement.Core.Data;
+using DataversePolicyEnforcement.Core.Evaluation;
+using DataversePolicyEnforcement.Plugins.Helpers;
+using Microsoft.Xrm.Sdk;
+using System;
 
 namespace DataversePolicyEnforcement.Plugins
 {
@@ -41,9 +45,11 @@ namespace DataversePolicyEnforcement.Plugins
                 );
             }
 
+            Entity preImage = null;
             if (
                 context.MessageName == "Update"
-                && !context.PreEntityImages.TryGetValue(PreImageName, out Entity preImage)
+                && !context.PreEntityImages.TryGetValue(PreImageName, out preImage)
+                && preImage != null
             )
             {
                 throw new InvalidPluginExecutionException(
@@ -52,6 +58,108 @@ namespace DataversePolicyEnforcement.Plugins
             }
 
             #endregion
+
+            try
+            {
+                var policyCollection = new PolicyCollection();
+
+                var governedAttributes = policyCollection.GetGovernedAttributes(
+                    systemService,
+                    target.LogicalName
+                );
+
+                if (governedAttributes.Count == 0)
+                {
+                    tracer.Trace("No attributes to govern. Exiting.");
+                    return;
+                }
+
+                var evaluator = new PolicyEvaluator(policyCollection);
+
+                foreach (var attr in governedAttributes)
+                {
+                    var isCreate = context.MessageName == "Create";
+                    var isUpdate = context.MessageName == "Update";
+
+                    var inTarget = target.Attributes.ContainsKey(attr);
+
+                    #region Update
+                    if (isUpdate && inTarget)
+                    {
+                        var decision = evaluator.EvaluateAttribute(
+                            systemService,
+                            target.LogicalName,
+                            attr,
+                            target,
+                            preImage
+                        );
+
+                        if (decision.ServerDetails.NotAllowed)
+                        {
+                            var newValue = target[attr];
+                            var oldValue = preImage.Attributes.ContainsKey(attr)
+                                ? preImage[attr]
+                                : null;
+
+                            if (!ValueEquality.AreEqual(newValue, oldValue))
+                            {
+                                throw new InvalidPluginExecutionException(
+                                    $"Change blocked by policy: {target.LogicalName}.{attr} is not allowed to change."
+                                );
+                            }
+                        }
+
+                        if (decision.ServerDetails.Required)
+                        {
+                            var newValue =
+                                target[attr]
+                                ?? throw new InvalidPluginExecutionException(
+                                    $"Policy violation: {target.LogicalName}.{attr} is required."
+                                );
+                        }
+                    }
+                    #endregion
+
+
+                    #region Create
+                    if (isCreate)
+                    {
+                        var decision = evaluator.EvaluateAttribute(
+                            systemService,
+                            target.LogicalName,
+                            attr,
+                            target,
+                            null
+                        );
+
+                        if (decision.ServerDetails.Required)
+                        {
+                            if (!target.Attributes.ContainsKey(attr) || target[attr] == null)
+                            {
+                                throw new InvalidPluginExecutionException(
+                                    $"Policy violation: {target.LogicalName}.{attr} is required."
+                                );
+                            }
+                        }
+
+                        if (
+                            decision.ServerDetails.NotAllowed
+                            && target.Attributes.ContainsKey(attr)
+                            && target[attr] != null
+                        )
+                        {
+                            throw new InvalidPluginExecutionException(
+                                $"Change blocked by policy: {target.LogicalName}.{attr} is not allowed to be set."
+                            );
+                        }
+                    }
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidPluginExecutionException(ex.Message, ex);
+            }
         }
     }
 }
