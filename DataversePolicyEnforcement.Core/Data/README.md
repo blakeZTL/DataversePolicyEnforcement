@@ -9,6 +9,7 @@ Key components
 Behavior highlights
 - `GetRules(service, entityLogicalName, attributeLogicalName)` validates arguments, returns only active `dpe_PolicyRule` records that match the entity/attribute, ordered by `dpe_Sequence` ascending.
 - `GetConditions(service, ruleId)` validates arguments, returns only active `dpe_PolicyCondition` records for the provided rule ordered by `dpe_Sequence` ascending.
+- `GetGovernedAttributes(service, entityLogicalName)` returns distinct attribute logical names that have active rules for the specified entity.
 
 Testing
 - Tests in `DataversePolicyEnforcement.Tests/Core/Data/PolicyCollectionTests.cs` use `FakeXrmEasy` to create in-memory entities and validate filtering, active-state, and ordering behavior.

@@ -205,4 +205,72 @@ namespace DataversePolicyEnforcement.Tests.Core.Data
             Assert.AreEqual(2, results[1].dpe_Sequence);
         }
     }
+
+    [TestClass]
+    public class GetGovernedAttributesTests : PolicyCollectionTestsBase
+    {
+        [TestMethod]
+        [TestCategory("ArgumentValidation")]
+        public void NullService_ThrowsArgumentNullException()
+        {
+            Assert.ThrowsException<ArgumentNullException>(
+                () => _collection.GetGovernedAttributes(null, "")
+            );
+        }
+
+        [TestMethod]
+        [TestCategory("ArgumentValidation")]
+        public void NullOrWhitespaceEntityLogicalName_ReturnsEmptyHash()
+        {
+            var result = _collection.GetGovernedAttributes(_testService, null);
+            Assert.AreEqual(0, result.Count);
+
+            result = _collection.GetGovernedAttributes(_testService, "");
+            Assert.AreEqual(0, result.Count);
+        }
+
+        [TestMethod]
+        [TestCategory("Results")]
+        public void ReturnsDistinctAttributes()
+        {
+            var result = _collection.GetGovernedAttributes(_testService, "account");
+            Assert.AreEqual(2, result.Count);
+        }
+
+        [TestMethod]
+        [TestCategory("Results")]
+        public void ReturnsDistinctAttributes_DisregardsRulesWithNullAttributeNames()
+        {
+            var rule = new dpe_PolicyRule
+            {
+                Id = Guid.NewGuid(),
+                dpe_TargetEntityLogicalName = "account",
+                dpe_TargetAttributeLogicalName = "",
+                dpe_Sequence = 1,
+                statecode = dpe_policyrule_statecode.Active
+            };
+            _context.AddEntity(rule);
+
+            var result = _collection.GetGovernedAttributes(_testService, "account");
+            Assert.AreEqual(2, result.Count);
+        }
+
+        [TestMethod]
+        [TestCategory("Results")]
+        public void ReturnsDistinctAttributes_DisregardsInactiveRules()
+        {
+            var rule = new dpe_PolicyRule
+            {
+                Id = Guid.NewGuid(),
+                dpe_TargetEntityLogicalName = "account",
+                dpe_TargetAttributeLogicalName = "another",
+                dpe_Sequence = 1,
+                statecode = dpe_policyrule_statecode.Inactive
+            };
+            _context.AddEntity(rule);
+
+            var result = _collection.GetGovernedAttributes(_testService, "account");
+            Assert.AreEqual(2, result.Count);
+        }
+    }
 }

@@ -107,5 +107,50 @@ namespace DataversePolicyEnforcement.Core.Data
             }
             return rules;
         }
+
+        public HashSet<string> GetGovernedAttributes(
+            IOrganizationService service,
+            string entityLogicalName
+        )
+        {
+            if (service == null)
+                throw new ArgumentNullException(nameof(service));
+
+            var governedAttributes = new HashSet<string>();
+
+            if (entityLogicalName == null || string.IsNullOrWhiteSpace(entityLogicalName))
+                return governedAttributes;
+
+            var query = new QueryExpression(dpe_PolicyRule.EntityLogicalName)
+            {
+                ColumnSet = new ColumnSet(dpe_PolicyRule.Fields.dpe_TargetAttributeLogicalName),
+                Criteria =
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression(
+                            dpe_PolicyRule.Fields.dpe_TargetEntityLogicalName,
+                            ConditionOperator.Equal,
+                            entityLogicalName
+                        ),
+                        new ConditionExpression(
+                            dpe_PolicyRule.Fields.statecode,
+                            ConditionOperator.Equal,
+                            (int)dpe_policyrule_statecode.Active
+                        )
+                    }
+                },
+                Distinct = true
+            };
+            var results = service.RetrieveMultiple(query);
+
+            foreach (var entity in results.Entities)
+            {
+                var rule = entity.ToEntity<dpe_PolicyRule>();
+                if (!string.IsNullOrEmpty(rule.dpe_TargetAttributeLogicalName))
+                    governedAttributes.Add(rule.dpe_TargetAttributeLogicalName);
+            }
+            return governedAttributes;
+        }
     }
 }
