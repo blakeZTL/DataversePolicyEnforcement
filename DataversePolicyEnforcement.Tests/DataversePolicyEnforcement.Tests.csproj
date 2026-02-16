@@ -135,7 +135,7 @@
   <ItemGroup>
     <Compile Include="Core\Comparison\ConditionTests.cs" />
     <Compile Include="Core\Data\PolicyCollectionTests.cs" />
-    <Compile Include="Core\Evaluation\Helpers.cs" />
+    <Compile Include="Helpers\ConditionHelpers.cs" />
     <Compile Include="Core\Evaluation\PolicyEvaluatorTests.cs" />
     <Compile Include="Core\Evaluation\PolicyScopeEvaluatorTests.cs" />
     <Compile Include="FakeXrmEasyTestBase.cs" />
