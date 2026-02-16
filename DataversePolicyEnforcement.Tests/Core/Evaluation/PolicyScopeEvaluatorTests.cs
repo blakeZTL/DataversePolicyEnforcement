@@ -83,16 +83,6 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
 
             _helpers = new Helpers(_context, _metCondition, _notMetCondition);
         }
-
-        //public void AddConditionToRule(dpe_PolicyRule rule, bool met = true, int sequence = 1)
-        //{
-        //    var condition = (met ? _metCondition : _notMetCondition)
-        //        .Clone()
-        //        .ToEntity<dpe_PolicyCondition>();
-        //    condition.dpe_PolicyRuleId = rule.ToEntityReference();
-        //    condition.dpe_Sequence = sequence;
-        //    _context.AddEntity(condition);
-        //}
     }
 
     [TestClass]

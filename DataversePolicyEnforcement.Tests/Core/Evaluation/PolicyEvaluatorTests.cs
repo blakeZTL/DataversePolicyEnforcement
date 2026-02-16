@@ -23,6 +23,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         protected dpe_PolicyCondition _notMetCondition;
         protected PolicyEvaluator _evaluator;
         protected Helpers _helpers;
+        protected PolicyDecision _decision = new PolicyDecision();
 
         public PolicyEvaluatorTestsBase()
         {
@@ -103,8 +104,163 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
     }
 
     [TestClass]
-    public class PolicyEvaluatorTests : PolicyEvaluatorTestsBase
+    public class EvaluateAttributeTests : PolicyEvaluatorTestsBase
     {
-        //
+        [TestMethod]
+        [TestCategory("General")]
+        public void NullArguments_ReturnsDefaultDecision()
+        {
+            var nullService = _evaluator.EvaluateAttribute(null, "", "", _target, _preImage);
+            Assert.IsFalse(nullService.ServerDetails.Required);
+            Assert.IsFalse(nullService.ServerDetails.NotAllowed);
+            Assert.IsFalse(nullService.ClientDetails.Required);
+            Assert.IsFalse(nullService.ClientDetails.NotAllowed);
+            Assert.IsTrue(nullService.ClientDetails.Visible);
+
+            var nullTarget = _evaluator.EvaluateAttribute(_testService, "", "", null, _preImage);
+            Assert.IsFalse(nullTarget.ServerDetails.Required);
+            Assert.IsFalse(nullTarget.ServerDetails.NotAllowed);
+            Assert.IsFalse(nullTarget.ClientDetails.Required);
+            Assert.IsFalse(nullTarget.ClientDetails.NotAllowed);
+            Assert.IsTrue(nullTarget.ClientDetails.Visible);
+        }
+
+        [TestMethod]
+        [TestCategory("General")]
+        public void NoRules_ReturnsDefaultDecision()
+        {
+            var decision = _evaluator.EvaluateAttribute(
+                _testService,
+                "not_account",
+                "name",
+                _target,
+                _preImage
+            );
+            Assert.IsFalse(decision.ServerDetails.Required);
+            Assert.IsFalse(decision.ServerDetails.NotAllowed);
+            Assert.IsFalse(decision.ClientDetails.Required);
+            Assert.IsFalse(decision.ClientDetails.NotAllowed);
+            Assert.IsTrue(decision.ClientDetails.Visible);
+        }
+
+        [TestMethod]
+        [TestCategory("Server Scope")]
+        public void AllServerScopedRules_ReturnDefaultClientDecision()
+        {
+            _requiredRule.dpe_Scope = Models.OptionSets.dpe_policyscope.ServerOnly;
+            _notAllowedRule.dpe_Scope = Models.OptionSets.dpe_policyscope.ServerOnly;
+            _notVisibleRule.dpe_Scope = Models.OptionSets.dpe_policyscope.ServerOnly;
+            _helpers.AddConditionToRule(_requiredRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notVisibleRule);
+            var decision = _evaluator.EvaluateAttribute(
+                _testService,
+                "account",
+                "name",
+                _target,
+                _preImage
+            );
+            Assert.IsTrue(decision.ServerDetails.Required);
+            Assert.IsTrue(decision.ServerDetails.NotAllowed);
+            Assert.IsFalse(decision.ClientDetails.Required);
+            Assert.IsFalse(decision.ClientDetails.NotAllowed);
+            Assert.IsTrue(decision.ClientDetails.Visible);
+        }
+
+        [TestMethod]
+        [TestCategory("Client Scope")]
+        public void AllClientScopedRules_ReturnDefaultServerDecision()
+        {
+            _requiredRule.dpe_Scope = Models.OptionSets.dpe_policyscope.FormOnly;
+            _notAllowedRule.dpe_Scope = Models.OptionSets.dpe_policyscope.FormOnly;
+            _notVisibleRule.dpe_Scope = Models.OptionSets.dpe_policyscope.FormOnly;
+            _helpers.AddConditionToRule(_requiredRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notVisibleRule);
+            var decision = _evaluator.EvaluateAttribute(
+                _testService,
+                "account",
+                "name",
+                _target,
+                _preImage
+            );
+            Assert.IsFalse(decision.ServerDetails.Required);
+            Assert.IsFalse(decision.ServerDetails.NotAllowed);
+            Assert.IsTrue(decision.ClientDetails.Required);
+            Assert.IsTrue(decision.ClientDetails.NotAllowed);
+            Assert.IsFalse(decision.ClientDetails.Visible);
+        }
+
+        [TestMethod]
+        [TestCategory("Both Scope")]
+        public void BothScopedRules_ReturnBothDecisions()
+        {
+            _requiredRule.dpe_Scope = Models.OptionSets.dpe_policyscope.Both;
+            _notAllowedRule.dpe_Scope = Models.OptionSets.dpe_policyscope.Both;
+            _notVisibleRule.dpe_Scope = Models.OptionSets.dpe_policyscope.Both;
+            _helpers.AddConditionToRule(_requiredRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notVisibleRule);
+            var decision = _evaluator.EvaluateAttribute(
+                _testService,
+                "account",
+                "name",
+                _target,
+                _preImage
+            );
+            Assert.IsTrue(decision.ServerDetails.Required);
+            Assert.IsTrue(decision.ServerDetails.NotAllowed);
+            Assert.IsTrue(decision.ClientDetails.Required);
+            Assert.IsTrue(decision.ClientDetails.NotAllowed);
+            Assert.IsFalse(decision.ClientDetails.Visible);
+        }
+
+        [TestMethod]
+        [TestCategory("General")]
+        public void InactiveRules_ReturnDefaultDecision()
+        {
+            _requiredRule.statecode = dpe_policyrule_statecode.Inactive;
+            _notAllowedRule.statecode = dpe_policyrule_statecode.Inactive;
+            _notVisibleRule.statecode = dpe_policyrule_statecode.Inactive;
+            _helpers.AddConditionToRule(_requiredRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notVisibleRule);
+            var decision = _evaluator.EvaluateAttribute(
+                _testService,
+                "account",
+                "name",
+                _target,
+                _preImage
+            );
+            Assert.IsFalse(decision.ServerDetails.Required);
+            Assert.IsFalse(decision.ServerDetails.NotAllowed);
+            Assert.IsFalse(decision.ClientDetails.Required);
+            Assert.IsFalse(decision.ClientDetails.NotAllowed);
+            Assert.IsTrue(decision.ClientDetails.Visible);
+        }
+
+        [TestMethod]
+        [TestCategory("General")]
+        public void RulesWithNullScopes_ReturnDefaultDecision()
+        {
+            _requiredRule.dpe_Scope = null;
+            _notAllowedRule.dpe_Scope = null;
+            _notVisibleRule.dpe_Scope = null;
+            _helpers.AddConditionToRule(_requiredRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notVisibleRule);
+            var decision = _evaluator.EvaluateAttribute(
+                _testService,
+                "account",
+                "name",
+                _target,
+                _preImage
+            );
+            Assert.IsFalse(decision.ServerDetails.Required);
+            Assert.IsFalse(decision.ServerDetails.NotAllowed);
+            Assert.IsFalse(decision.ClientDetails.Required);
+            Assert.IsFalse(decision.ClientDetails.NotAllowed);
+            Assert.IsTrue(decision.ClientDetails.Visible);
+        }
     }
 }
