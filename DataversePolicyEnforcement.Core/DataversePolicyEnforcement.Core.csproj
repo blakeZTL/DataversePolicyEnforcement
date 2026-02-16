@@ -96,7 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comparison\Condition.cs" />
+    <Compile Include="Data\IMetadataValidator.cs" />
     <Compile Include="Data\IPolicyCollection.cs" />
+    <Compile Include="Data\MetadataValidator.cs" />
     <Compile Include="Data\PolicyCollection.cs" />
     <Compile Include="Evaluation\IPolicyEvaluator.cs" />
     <Compile Include="Evaluation\IPolicyScopeEvaluator.cs" />

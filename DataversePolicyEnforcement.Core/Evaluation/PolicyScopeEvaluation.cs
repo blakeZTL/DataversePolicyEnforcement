@@ -1,4 +1,5 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
+using DataversePolicyEnforcement.Core.Model;
 using DataversePolicyEnforcement.Models.Entities;
 using DataversePolicyEnforcement.Models.OptionSets;
 using Microsoft.Xrm.Sdk;

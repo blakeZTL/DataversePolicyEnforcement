@@ -2,15 +2,15 @@
 using FakeXrmEasy.Abstractions;
 using FakeXrmEasy.Extensions;
 
-namespace DataversePolicyEnforcement.Tests.Core.Evaluation
+namespace DataversePolicyEnforcement.Tests.Helpers
 {
-    public class Helpers
+    public class ConditionHelpers
     {
         readonly dpe_PolicyCondition _metCondition;
         readonly dpe_PolicyCondition _notMetCondition;
         readonly IXrmFakedContext _context;
 
-        public Helpers(
+        public ConditionHelpers(
             IXrmFakedContext context,
             dpe_PolicyCondition metCondition,
             dpe_PolicyCondition notMetCondition
