@@ -3,7 +3,7 @@ using System;
 
 namespace DataversePolicyEnforcement.Plugins.Helpers
 {
-    internal static class ValueEquality
+    public static class ValueEquality
     {
         public static bool AreEqual(object a, object b)
         {
