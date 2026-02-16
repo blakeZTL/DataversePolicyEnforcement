@@ -108,8 +108,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Comparison\README.md" />
+    <None Include="Data\README.md" />
     <None Include="dpe.snk" />
+    <None Include="Evaluation\README.md" />
+    <None Include="Model\README.md" />
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataversePolicyEnforcement.Models\DataversePolicyEnforcement.Models.csproj">

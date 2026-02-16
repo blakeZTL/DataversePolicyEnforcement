@@ -112,6 +112,7 @@
     <None Include="dpe.snk" />
     <None Include="generate-models.ps1" />
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
