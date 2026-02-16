@@ -1,0 +1,22 @@
+{
+  "suppressINotifyPattern": false,
+  "suppressGeneratedCodeAttribute": false,
+  "language": "CS",
+  "namespace": "DataversePolicyEnforcement.Model",
+  "serviceContextName": "OrgContext",
+  "generateSdkMessages": true,
+  "generateGlobalOptionSets": false,
+  "emitFieldsClasses": true,
+  "entityTypesFolder": "Entities",
+  "messagesTypesFolder": "Messages",
+  "optionSetsTypesFolder": "OptionSets",
+  "entityNamesFilter": [
+    "dpe_policycondition",
+    "dpe_policyrule"
+  ],
+  "messageNamesFilter": [
+    "examp_*"
+  ],
+  "emitEntityETC": false,
+  "emitVirtualAttributes": true
+}
