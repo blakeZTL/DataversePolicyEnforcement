@@ -142,6 +142,7 @@
     <Compile Include="FakeXrmEasyTestBase.cs" />
     <Compile Include="Plugins\Helpers\ValueEqualityTests.cs" />
     <Compile Include="Plugins\PolicyEnforcementPluginTests.cs" />
+    <Compile Include="Plugins\PolicyRule\ValidatePolicyRulePluginTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -169,7 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Plugins\PolicyCondition\" />
-    <Folder Include="Plugins\PolicyRule\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
