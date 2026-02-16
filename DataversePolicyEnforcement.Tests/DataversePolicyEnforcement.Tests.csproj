@@ -150,6 +150,7 @@
     <None Include="Core\Evaluation\README.md" />
     <None Include="Core\README.md" />
     <None Include="packages.config" />
+    <None Include="Plugins\Helpers\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataversePolicyEnforcement.Core\DataversePolicyEnforcement.Core.csproj">
