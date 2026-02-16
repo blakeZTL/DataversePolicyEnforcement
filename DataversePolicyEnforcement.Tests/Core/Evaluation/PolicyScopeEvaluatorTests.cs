@@ -21,6 +21,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         protected dpe_PolicyRule _notAllowedRule;
         protected dpe_PolicyCondition _metCondition;
         protected dpe_PolicyCondition _notMetCondition;
+        protected Helpers _helpers;
 
         public PolicyScopeEvaluatorTestsBase()
         {
@@ -79,17 +80,19 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             };
 
             _testService = _context.GetOrganizationService();
+
+            _helpers = new Helpers(_context, _metCondition, _notMetCondition);
         }
 
-        public void AddConditionToRule(dpe_PolicyRule rule, bool met = true, int sequence = 1)
-        {
-            var condition = (met ? _metCondition : _notMetCondition)
-                .Clone()
-                .ToEntity<dpe_PolicyCondition>();
-            condition.dpe_PolicyRuleId = rule.ToEntityReference();
-            condition.dpe_Sequence = sequence;
-            _context.AddEntity(condition);
-        }
+        //public void AddConditionToRule(dpe_PolicyRule rule, bool met = true, int sequence = 1)
+        //{
+        //    var condition = (met ? _metCondition : _notMetCondition)
+        //        .Clone()
+        //        .ToEntity<dpe_PolicyCondition>();
+        //    condition.dpe_PolicyRuleId = rule.ToEntityReference();
+        //    condition.dpe_Sequence = sequence;
+        //    _context.AddEntity(condition);
+        //}
     }
 
     [TestClass]
@@ -184,7 +187,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             _context.AddEntity(rule);
             var rules = new List<dpe_PolicyRule> { rule };
 
-            AddConditionToRule(rule, false);
+            _helpers.AddConditionToRule(rule, false);
 
             var result = _evaluator.EvaluateClientScope(
                 _service,
@@ -205,8 +208,8 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             rule.dpe_Sequence = _notVisibleRule.dpe_Sequence + 1;
             _context.AddEntity(rule);
 
-            AddConditionToRule(rule);
-            AddConditionToRule(_notVisibleRule);
+            _helpers.AddConditionToRule(rule);
+            _helpers.AddConditionToRule(_notVisibleRule);
 
             var rules = new List<dpe_PolicyRule> { rule, _notVisibleRule };
 
@@ -227,7 +230,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         {
             _notVisibleRule.dpe_Result = null;
 
-            AddConditionToRule(_notVisibleRule);
+            _helpers.AddConditionToRule(_notVisibleRule);
 
             var rules = new List<dpe_PolicyRule> { _notVisibleRule };
 
@@ -250,8 +253,8 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             rule.dpe_Sequence = _requiredRule.dpe_Sequence + 1;
             _context.AddEntity(rule);
 
-            AddConditionToRule(rule);
-            AddConditionToRule(_requiredRule);
+            _helpers.AddConditionToRule(rule);
+            _helpers.AddConditionToRule(_requiredRule);
 
             var rules = new List<dpe_PolicyRule> { rule, _requiredRule };
 
@@ -269,14 +272,14 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         [TestMethod]
         public void NotAllowedTrue_ImmediatelySetsNotAllowedAndStopsEvaluation()
         {
-            AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
 
             var additionalRule = _notAllowedRule.Clone().ToEntity<dpe_PolicyRule>();
             additionalRule.dpe_Result = false;
             additionalRule.dpe_Sequence = _notAllowedRule.dpe_Sequence + 1;
             _context.AddEntity(additionalRule);
 
-            AddConditionToRule(additionalRule);
+            _helpers.AddConditionToRule(additionalRule);
 
             var rules = new List<dpe_PolicyRule> { additionalRule, _notAllowedRule };
 
@@ -299,10 +302,10 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             additionalRule.dpe_Sequence = 1;
             _context.AddEntity(additionalRule);
 
-            AddConditionToRule(additionalRule);
+            _helpers.AddConditionToRule(additionalRule);
 
             _notAllowedRule.dpe_Sequence = additionalRule.dpe_Sequence + 1;
-            AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
 
             var rules = new List<dpe_PolicyRule> { additionalRule, _notAllowedRule };
 
@@ -395,7 +398,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             _context.AddEntity(rule);
             var rules = new List<dpe_PolicyRule> { rule };
 
-            AddConditionToRule(rule, false);
+            _helpers.AddConditionToRule(rule, false);
 
             var result = _evaluator.EvaluateServerScope(
                 _service,
@@ -414,7 +417,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         {
             _requiredRule.dpe_Result = null;
 
-            AddConditionToRule(_requiredRule);
+            _helpers.AddConditionToRule(_requiredRule);
 
             var rules = new List<dpe_PolicyRule> { _requiredRule };
 
@@ -437,8 +440,8 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             rule.dpe_Sequence = _requiredRule.dpe_Sequence + 1;
             _context.AddEntity(rule);
 
-            AddConditionToRule(rule);
-            AddConditionToRule(_requiredRule);
+            _helpers.AddConditionToRule(rule);
+            _helpers.AddConditionToRule(_requiredRule);
 
             var rules = new List<dpe_PolicyRule> { rule, _requiredRule };
 
@@ -456,14 +459,14 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         [TestMethod]
         public void NotAllowedTrue_ImmediatelySetsNotAllowedAndStopsEvaluation()
         {
-            AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
 
             var additionalRule = _notAllowedRule.Clone().ToEntity<dpe_PolicyRule>();
             additionalRule.dpe_Result = false;
             additionalRule.dpe_Sequence = _notAllowedRule.dpe_Sequence + 1;
             _context.AddEntity(additionalRule);
 
-            AddConditionToRule(additionalRule);
+            _helpers.AddConditionToRule(additionalRule);
 
             var rules = new List<dpe_PolicyRule> { additionalRule, _notAllowedRule };
 
@@ -486,10 +489,10 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             additionalRule.dpe_Sequence = 1;
             _context.AddEntity(additionalRule);
 
-            AddConditionToRule(additionalRule);
+            _helpers.AddConditionToRule(additionalRule);
 
             _notAllowedRule.dpe_Sequence = additionalRule.dpe_Sequence + 1;
-            AddConditionToRule(_notAllowedRule);
+            _helpers.AddConditionToRule(_notAllowedRule);
 
             var rules = new List<dpe_PolicyRule> { additionalRule, _notAllowedRule };
 
