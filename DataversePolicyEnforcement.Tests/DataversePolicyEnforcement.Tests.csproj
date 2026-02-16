@@ -153,6 +153,7 @@
     <None Include="Core\README.md" />
     <None Include="packages.config" />
     <None Include="Plugins\Helpers\README.md" />
+    <None Include="Plugins\PolicyRule\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataversePolicyEnforcement.Core\DataversePolicyEnforcement.Core.csproj">
