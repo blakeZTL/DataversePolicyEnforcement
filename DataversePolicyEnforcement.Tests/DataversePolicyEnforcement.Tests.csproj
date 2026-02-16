@@ -139,6 +139,8 @@
     <Compile Include="Core\Evaluation\PolicyEvaluatorTests.cs" />
     <Compile Include="Core\Evaluation\PolicyScopeEvaluatorTests.cs" />
     <Compile Include="FakeXrmEasyTestBase.cs" />
+    <Compile Include="Plugins\Helpers\ValueEqualityTests.cs" />
+    <Compile Include="Plugins\PolicyEnforcementPluginTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -163,7 +165,10 @@
       <Name>DataversePolicyEnforcement.Plugins</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Plugins\PolicyCondition\" />
+    <Folder Include="Plugins\PolicyRule\" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
