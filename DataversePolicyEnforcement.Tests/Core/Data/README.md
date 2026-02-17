@@ -8,5 +8,5 @@ Key focuses:
 - Ordering by sequence so evaluation honors rule/condition order.
 
 Important files:
- - `PolicyCollectionTests.cs` — tests for `PolicyCollection.GetRules` and `PolicyCollection.GetConditions` covering validation, filtering, active-state, and sequence ordering.
- - `MetadataValidatorTests.cs` — tests for `MetadataValidator` (implementation of `IMetadataValidator`) that use `FakeXrmEasy` metadata initialization to validate `ValidateAttribute`, `ValidateAllAttributes`, and `ValidateEntity` behavior including argument validation, successful lookups, and missing/invalid metadata scenarios.
+ - `PolicyCollectionTests.cs` â€” tests for `PolicyCollection.GetRules` and `PolicyCollection.GetConditions` covering validation, filtering, active-state, and sequence ordering.
+ - `MetadataValidatorTests.cs` â€” tests for `MetadataValidator` (implementation of `IMetadataValidator`) that use `FakeXrmEasy` metadata initialization to validate `ValidateAttribute`, `ValidateAllAttributes`, and `ValidateEntity` behavior including argument validation, successful lookups, and missing/invalid metadata scenarios.
