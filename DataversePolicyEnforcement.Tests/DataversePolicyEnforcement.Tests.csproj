@@ -134,11 +134,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Comparison\ConditionTests.cs" />
+    <Compile Include="Core\Data\MetadataValidatorTests.cs" />
     <Compile Include="Core\Data\PolicyCollectionTests.cs" />
-    <Compile Include="Core\Evaluation\Helpers.cs" />
+    <Compile Include="Helpers\ConditionHelpers.cs" />
     <Compile Include="Core\Evaluation\PolicyEvaluatorTests.cs" />
     <Compile Include="Core\Evaluation\PolicyScopeEvaluatorTests.cs" />
     <Compile Include="FakeXrmEasyTestBase.cs" />
+    <Compile Include="Plugins\Helpers\ValueEqualityTests.cs" />
+    <Compile Include="Plugins\PolicyEnforcementPluginTests.cs" />
+    <Compile Include="Plugins\PolicyRule\ValidatePolicyRulePluginTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +152,8 @@
     <None Include="Core\Evaluation\README.md" />
     <None Include="Core\README.md" />
     <None Include="packages.config" />
+    <None Include="Plugins\Helpers\README.md" />
+    <None Include="Plugins\PolicyRule\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataversePolicyEnforcement.Core\DataversePolicyEnforcement.Core.csproj">
@@ -158,8 +164,14 @@
       <Project>{ffba5cb4-f326-4dea-bccb-7f0cf229fa1c}</Project>
       <Name>DataversePolicyEnforcement.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataversePolicyEnforcement.Plugins\DataversePolicyEnforcement.Plugins.csproj">
+      <Project>{475eca96-8b8f-42e9-bd2e-a91d708f6f9c}</Project>
+      <Name>DataversePolicyEnforcement.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Plugins\PolicyCondition\" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
