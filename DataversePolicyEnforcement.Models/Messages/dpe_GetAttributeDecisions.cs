@@ -38,6 +38,25 @@ namespace DataversePolicyEnforcement.Models
 			}
 		}
 		
+		public string[] dpe_gad_targetattributelogicalnames
+		{
+			get
+			{
+				if (this.Parameters.Contains("dpe_gad_targetattributelogicalnames"))
+				{
+					return ((string[])(this.Parameters["dpe_gad_targetattributelogicalnames"]));
+				}
+				else
+				{
+					return default(string[]);
+				}
+			}
+			set
+			{
+				this.Parameters["dpe_gad_targetattributelogicalnames"] = value;
+			}
+		}
+		
 		public string dpe_gad_triggerattributelogicalname
 		{
 			get
@@ -156,6 +175,7 @@ namespace DataversePolicyEnforcement.Models
 		{
 			this.RequestName = "dpe_GetAttributeDecisions";
 			this.dpe_gad_entitylogicalname = default(string);
+			this.dpe_gad_targetattributelogicalnames = default(string[]);
 			this.dpe_gad_triggerattributelogicalname = default(string);
 		}
 	}
