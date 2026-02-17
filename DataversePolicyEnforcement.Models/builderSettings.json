@@ -2,7 +2,7 @@
   "suppressINotifyPattern": false,
   "suppressGeneratedCodeAttribute": false,
   "language": "CS",
-  "namespace": "DataversePolicyEnforcement.Model",
+  "namespace": "DataversePolicyEnforcement.Models",
   "serviceContextName": "OrgContext",
   "generateSdkMessages": true,
   "generateGlobalOptionSets": false,
@@ -15,7 +15,7 @@
     "dpe_policyrule"
   ],
   "messageNamesFilter": [
-    "examp_*"
+    "dpe_GetAttributeDecisions"
   ],
   "emitEntityETC": false,
   "emitVirtualAttributes": true
