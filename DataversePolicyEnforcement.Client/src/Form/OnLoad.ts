@@ -7,17 +7,17 @@ export function onLoad(
 ) {
   const policyConfig = new FormPolicyConfiguration(config);
   if (!policyConfig.rules.length) {
-    console.warn("No policy rules defined in configuration");
+    console.warn("DPE: No policy rules defined in configuration");
     return;
   }
-  console.debug(policyConfig);
+  console.debug("DPE: Policy configuration", policyConfig);
   const formContext = executionContext.getFormContext();
 
   const policyService = new PolicyService(Xrm.WebApi);
 
   policyConfig.triggerGroups.forEach((tg) => {
     console.debug(
-      `Setting up trigger group for ${tg.triggerAttributeLogicalName}`,
+      `DPE: Setting up trigger group for ${tg.triggerAttributeLogicalName}`,
     );
     const attribute = formContext.getAttribute(
       tg.triggerAttributeLogicalName,
@@ -26,7 +26,7 @@ export function onLoad(
       // warn for each associated rule/affected attribute so tests can assert per-rule warnings
       tg.attributeLogicalNames.forEach((attrName) => {
         console.warn(
-          `Trigger attribute '${tg.triggerAttributeLogicalName}' not found for rule on attribute '${attrName}'`,
+          `DPE: Trigger attribute '${tg.triggerAttributeLogicalName}' not found for rule on attribute '${attrName}'`,
         );
       });
       return;
@@ -47,14 +47,14 @@ export function onLoad(
         decisions.forEach((d) => {
           const attr = formContext.getAttribute(d.attributeLogicalName);
           console.debug(
-            `Applying policy decision for ${d.attributeLogicalName}`,
+            `DPE: Applying policy decision for ${d.attributeLogicalName}`,
             d.policyDetails,
             attr,
           );
 
           if (!attr) {
             console.warn(
-              `Affected attribute ${d.attributeLogicalName} not found on form`,
+              `DPE: Affected attribute ${d.attributeLogicalName} not found on form`,
             );
             return;
           }

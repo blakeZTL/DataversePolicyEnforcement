@@ -60,7 +60,7 @@ describe("Form OnLoad", () => {
       .mockImplementation(() => {});
     onLoad(eventContext, JSON.stringify({ rules: [] }));
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      "No policy rules defined in configuration",
+      "DPE: No policy rules defined in configuration",
     );
     consoleWarnSpy.mockRestore();
   });
@@ -76,7 +76,7 @@ describe("Form OnLoad", () => {
     };
     onLoad(eventContext, JSON.stringify(config));
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      "Trigger attribute 'nonexistent' not found for rule on attribute 'name'",
+      "DPE: Trigger attribute 'nonexistent' not found for rule on attribute 'name'",
     );
     consoleWarnSpy.mockRestore();
   });
@@ -99,7 +99,7 @@ describe("Form OnLoad", () => {
     triggerAttribute.fireOnChange();
     await getAttributeDecisionsAsyncSpy.mock.results[0].value;
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      "Affected attribute nonexistent not found on form",
+      "DPE: Affected attribute nonexistent not found on form",
     );
     consoleWarnSpy.mockRestore();
     getAttributeDecisionsAsyncSpy.mockRestore();
