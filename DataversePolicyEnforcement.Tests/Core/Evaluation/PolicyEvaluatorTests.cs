@@ -1,7 +1,7 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
 using DataversePolicyEnforcement.Core.Evaluation;
 using DataversePolicyEnforcement.Core.Model;
-using DataversePolicyEnforcement.Models.Entities;
+using DataversePolicyEnforcement.Models;
 using DataversePolicyEnforcement.Tests.Helpers;
 using FakeXrmEasy.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -44,7 +44,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.Required,
+                dpe_PolicyType = dpe_policytype.Required,
                 dpe_Sequence = 1,
                 dpe_Result = true,
                 statecode = dpe_policyrule_statecode.Active
@@ -57,7 +57,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.NotAllowed,
+                dpe_PolicyType = dpe_policytype.NotAllowed,
                 dpe_Sequence = 3,
                 dpe_Result = true,
                 statecode = dpe_policyrule_statecode.Active
@@ -70,8 +70,8 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.Visible,
-                dpe_Scope = Models.OptionSets.dpe_policyscope.FormOnly,
+                dpe_PolicyType = dpe_policytype.Visible,
+                dpe_Scope = dpe_policyscope.FormOnly,
                 dpe_Sequence = 1,
                 dpe_Result = false,
                 statecode = dpe_policyrule_statecode.Active
@@ -83,23 +83,23 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             _metCondition = new dpe_PolicyCondition
             {
                 Id = Guid.NewGuid(),
-                dpe_Operator = Models.OptionSets.dpe_policyconditionoperator.Equals,
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_Operator = dpe_policyconditionoperator.Equals,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = _target["trigger"].ToString(),
                 statecode = dpe_policycondition_statecode.Active
             };
             _notMetCondition = new dpe_PolicyCondition
             {
                 Id = Guid.NewGuid(),
-                dpe_Operator = Models.OptionSets.dpe_policyconditionoperator.Equals,
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_Operator = dpe_policyconditionoperator.Equals,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = "not_value",
                 statecode = dpe_policycondition_statecode.Active
             };
 
             _testService = _context.GetOrganizationService();
 
-            _evaluator = new PolicyEvaluator(_policyCollection);
+            _evaluator = new PolicyEvaluator(_testService, _policyCollection);
 
             _helpers = new ConditionHelpers(_context, _metCondition, _notMetCondition);
         }
@@ -112,14 +112,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         [TestCategory("General")]
         public void NullArguments_ReturnsDefaultDecision()
         {
-            var nullService = _evaluator.EvaluateAttribute(null, "", "", _target, _preImage);
-            Assert.IsFalse(nullService.ServerDetails.Required);
-            Assert.IsFalse(nullService.ServerDetails.NotAllowed);
-            Assert.IsFalse(nullService.ClientDetails.Required);
-            Assert.IsFalse(nullService.ClientDetails.NotAllowed);
-            Assert.IsTrue(nullService.ClientDetails.Visible);
-
-            var nullTarget = _evaluator.EvaluateAttribute(_testService, "", "", null, _preImage);
+            var nullTarget = _evaluator.EvaluateAttribute("", "", null, _preImage);
             Assert.IsFalse(nullTarget.ServerDetails.Required);
             Assert.IsFalse(nullTarget.ServerDetails.NotAllowed);
             Assert.IsFalse(nullTarget.ClientDetails.Required);
@@ -131,13 +124,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         [TestCategory("General")]
         public void NoRules_ReturnsDefaultDecision()
         {
-            var decision = _evaluator.EvaluateAttribute(
-                _testService,
-                "not_account",
-                "name",
-                _target,
-                _preImage
-            );
+            var decision = _evaluator.EvaluateAttribute("not_account", "name", _target, _preImage);
             Assert.IsFalse(decision.ServerDetails.Required);
             Assert.IsFalse(decision.ServerDetails.NotAllowed);
             Assert.IsFalse(decision.ClientDetails.Required);
@@ -149,19 +136,13 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         [TestCategory("Server Scope")]
         public void AllServerScopedRules_ReturnDefaultClientDecision()
         {
-            _requiredRule.dpe_Scope = Models.OptionSets.dpe_policyscope.ServerOnly;
-            _notAllowedRule.dpe_Scope = Models.OptionSets.dpe_policyscope.ServerOnly;
-            _notVisibleRule.dpe_Scope = Models.OptionSets.dpe_policyscope.ServerOnly;
+            _requiredRule.dpe_Scope = dpe_policyscope.ServerOnly;
+            _notAllowedRule.dpe_Scope = dpe_policyscope.ServerOnly;
+            _notVisibleRule.dpe_Scope = dpe_policyscope.ServerOnly;
             _helpers.AddConditionToRule(_requiredRule);
             _helpers.AddConditionToRule(_notAllowedRule);
             _helpers.AddConditionToRule(_notVisibleRule);
-            var decision = _evaluator.EvaluateAttribute(
-                _testService,
-                "account",
-                "name",
-                _target,
-                _preImage
-            );
+            var decision = _evaluator.EvaluateAttribute("account", "name", _target, _preImage);
             Assert.IsTrue(decision.ServerDetails.Required);
             Assert.IsTrue(decision.ServerDetails.NotAllowed);
             Assert.IsFalse(decision.ClientDetails.Required);
@@ -173,19 +154,13 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         [TestCategory("Client Scope")]
         public void AllClientScopedRules_ReturnDefaultServerDecision()
         {
-            _requiredRule.dpe_Scope = Models.OptionSets.dpe_policyscope.FormOnly;
-            _notAllowedRule.dpe_Scope = Models.OptionSets.dpe_policyscope.FormOnly;
-            _notVisibleRule.dpe_Scope = Models.OptionSets.dpe_policyscope.FormOnly;
+            _requiredRule.dpe_Scope = dpe_policyscope.FormOnly;
+            _notAllowedRule.dpe_Scope = dpe_policyscope.FormOnly;
+            _notVisibleRule.dpe_Scope = dpe_policyscope.FormOnly;
             _helpers.AddConditionToRule(_requiredRule);
             _helpers.AddConditionToRule(_notAllowedRule);
             _helpers.AddConditionToRule(_notVisibleRule);
-            var decision = _evaluator.EvaluateAttribute(
-                _testService,
-                "account",
-                "name",
-                _target,
-                _preImage
-            );
+            var decision = _evaluator.EvaluateAttribute("account", "name", _target, _preImage);
             Assert.IsFalse(decision.ServerDetails.Required);
             Assert.IsFalse(decision.ServerDetails.NotAllowed);
             Assert.IsTrue(decision.ClientDetails.Required);
@@ -197,19 +172,13 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
         [TestCategory("Both Scope")]
         public void BothScopedRules_ReturnBothDecisions()
         {
-            _requiredRule.dpe_Scope = Models.OptionSets.dpe_policyscope.Both;
-            _notAllowedRule.dpe_Scope = Models.OptionSets.dpe_policyscope.Both;
-            _notVisibleRule.dpe_Scope = Models.OptionSets.dpe_policyscope.Both;
+            _requiredRule.dpe_Scope = dpe_policyscope.Both;
+            _notAllowedRule.dpe_Scope = dpe_policyscope.Both;
+            _notVisibleRule.dpe_Scope = dpe_policyscope.Both;
             _helpers.AddConditionToRule(_requiredRule);
             _helpers.AddConditionToRule(_notAllowedRule);
             _helpers.AddConditionToRule(_notVisibleRule);
-            var decision = _evaluator.EvaluateAttribute(
-                _testService,
-                "account",
-                "name",
-                _target,
-                _preImage
-            );
+            var decision = _evaluator.EvaluateAttribute("account", "name", _target, _preImage);
             Assert.IsTrue(decision.ServerDetails.Required);
             Assert.IsTrue(decision.ServerDetails.NotAllowed);
             Assert.IsTrue(decision.ClientDetails.Required);
@@ -227,13 +196,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             _helpers.AddConditionToRule(_requiredRule);
             _helpers.AddConditionToRule(_notAllowedRule);
             _helpers.AddConditionToRule(_notVisibleRule);
-            var decision = _evaluator.EvaluateAttribute(
-                _testService,
-                "account",
-                "name",
-                _target,
-                _preImage
-            );
+            var decision = _evaluator.EvaluateAttribute("account", "name", _target, _preImage);
             Assert.IsFalse(decision.ServerDetails.Required);
             Assert.IsFalse(decision.ServerDetails.NotAllowed);
             Assert.IsFalse(decision.ClientDetails.Required);
@@ -251,13 +214,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             _helpers.AddConditionToRule(_requiredRule);
             _helpers.AddConditionToRule(_notAllowedRule);
             _helpers.AddConditionToRule(_notVisibleRule);
-            var decision = _evaluator.EvaluateAttribute(
-                _testService,
-                "account",
-                "name",
-                _target,
-                _preImage
-            );
+            var decision = _evaluator.EvaluateAttribute("account", "name", _target, _preImage);
             Assert.IsFalse(decision.ServerDetails.Required);
             Assert.IsFalse(decision.ServerDetails.NotAllowed);
             Assert.IsFalse(decision.ClientDetails.Required);
