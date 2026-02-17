@@ -1,7 +1,10 @@
-module.exports = [
-    {
-        rules: {
-            // Add rules here.
-        }
-    }
+export default [
+  {
+    rules: {
+      // Add rules here.
+    },
+    globals: {
+      Xrm: "readonly",
+    },
+  },
 ];

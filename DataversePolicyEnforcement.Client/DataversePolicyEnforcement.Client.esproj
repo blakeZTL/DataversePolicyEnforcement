@@ -1,3 +1,11 @@
 <Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.3864779">
-
+  <ItemGroup>
+    <None Remove=".vscode\**" />
+    <None Remove="dist\**" />
+    <TypeScriptConfiguration Remove=".vscode\**" />
+    <TypeScriptConfiguration Remove="dist\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Stores\" />
+  </ItemGroup>
 </Project>
