@@ -1,4 +1,4 @@
-﻿using DataversePolicyEnforcement.Models.Entities;
+﻿using DataversePolicyEnforcement.Models;
 using DataversePolicyEnforcement.Plugins.PolicyRule;
 using FakeXrmEasy.Extensions;
 using FakeXrmEasy.Plugins;
@@ -27,8 +27,8 @@ namespace DataversePolicyEnforcement.Tests.Plugins.PolicyRule
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.Required,
-                dpe_Scope = Models.OptionSets.dpe_policyscope.ServerOnly,
+                dpe_PolicyType = dpe_policytype.Required,
+                dpe_Scope = dpe_policyscope.ServerOnly,
                 dpe_Sequence = 1,
                 dpe_Result = true
             };
@@ -242,8 +242,8 @@ namespace DataversePolicyEnforcement.Tests.Plugins.PolicyRule
         public void InvalidScopeForPolicyType_Throws(string messageName)
         {
             _pluginContext.MessageName = messageName;
-            _target.dpe_PolicyType = Models.OptionSets.dpe_policytype.Visible;
-            _target.dpe_Scope = Models.OptionSets.dpe_policyscope.ServerOnly;
+            _target.dpe_PolicyType = dpe_policytype.Visible;
+            _target.dpe_Scope = dpe_policyscope.ServerOnly;
 
             var expectedMessage = "A visibility rule can only be applied to the form or both";
 

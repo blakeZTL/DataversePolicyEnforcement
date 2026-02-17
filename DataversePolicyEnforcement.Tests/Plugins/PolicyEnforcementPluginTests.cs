@@ -1,7 +1,7 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
 using DataversePolicyEnforcement.Core.Evaluation;
 using DataversePolicyEnforcement.Core.Model;
-using DataversePolicyEnforcement.Models.Entities;
+using DataversePolicyEnforcement.Models;
 using DataversePolicyEnforcement.Plugins;
 using DataversePolicyEnforcement.Tests.Helpers;
 using FakeXrmEasy.Extensions;
@@ -53,8 +53,8 @@ namespace DataversePolicyEnforcement.Tests.Plugins
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.Required,
-                dpe_Scope = Models.OptionSets.dpe_policyscope.Both,
+                dpe_PolicyType = dpe_policytype.Required,
+                dpe_Scope = dpe_policyscope.Both,
                 dpe_Sequence = 1,
                 dpe_Result = true,
                 statecode = dpe_policyrule_statecode.Active
@@ -67,8 +67,8 @@ namespace DataversePolicyEnforcement.Tests.Plugins
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.NotAllowed,
-                dpe_Scope = Models.OptionSets.dpe_policyscope.Both,
+                dpe_PolicyType = dpe_policytype.NotAllowed,
+                dpe_Scope = dpe_policyscope.Both,
                 dpe_Sequence = 3,
                 dpe_Result = true,
                 statecode = dpe_policyrule_statecode.Active
@@ -80,23 +80,23 @@ namespace DataversePolicyEnforcement.Tests.Plugins
             _metCondition = new dpe_PolicyCondition
             {
                 Id = Guid.NewGuid(),
-                dpe_Operator = Models.OptionSets.dpe_policyconditionoperator.Equals,
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_Operator = dpe_policyconditionoperator.Equals,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = _target["trigger"].ToString(),
                 statecode = dpe_policycondition_statecode.Active
             };
             _notMetCondition = new dpe_PolicyCondition
             {
                 Id = Guid.NewGuid(),
-                dpe_Operator = Models.OptionSets.dpe_policyconditionoperator.Equals,
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_Operator = dpe_policyconditionoperator.Equals,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = "not_value",
                 statecode = dpe_policycondition_statecode.Active
             };
 
             _testService = _context.GetOrganizationService();
 
-            _evaluator = new PolicyEvaluator(_policyCollection);
+            _evaluator = new PolicyEvaluator(_testService, _policyCollection);
 
             _conditionHelpers = new ConditionHelpers(_context, _metCondition, _notMetCondition);
         }
