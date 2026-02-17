@@ -2,13 +2,13 @@
 
 A solution for enforcing policies against Microsoft Dataverse data and operations. This repository provides core validation and enforcement logic with a client surface and a planned Custom API bridge to integrate with host applications.
 
-Status: WIP — Core functionality is available; the `CustomApi` project is planned as the bridge between the client and core but hasn't been implemented yet.
+Status: WIP â€” Core functionality is available; the `CustomApi` project is planned as the bridge between the client and core but hasn't been implemented yet.
 
 Contents
- - `src/DataversePolicyEnforcement.Core` — Core libraries implementing validation, policy rules, and enforcement logic.
- - `src/DataversePolicyEnforcement.Client` — Client(s) that call into the core libraries to apply policies from a UI or automated process.
- - `src/DataversePolicyEnforcement.CustomApi` — (Planned) A Dataverse Custom API project that will act as the bridge between Dataverse clients and the `Core` logic.
- - `tests/` — Unit and integration tests for the core and client projects.
+ - `src/DataversePolicyEnforcement.Core` â€” Core libraries implementing validation, policy rules, and enforcement logic.
+ - `src/DataversePolicyEnforcement.Client` â€” Client(s) that call into the core libraries to apply policies from a UI or automated process.
+ - `src/DataversePolicyEnforcement.CustomApi` â€” (Planned) A Dataverse Custom API project that will act as the bridge between Dataverse clients and the `Core` logic.
+ - `tests/` â€” Unit and integration tests for the core and client projects.
 
 Key concepts
  - Policy: A rule or set of rules describing allowed or disallowed operations on Dataverse entities (create/update/delete) or attribute values.
@@ -69,10 +69,5 @@ Contributing
  - Fork the repo and open a pull request against `main`.
  - Follow existing code style and add tests for new behavior.
 
-License
- - Add a `LICENSE` file to the repository and state the license here.
-
 Contact
  - Repo: `https://github.com/blakeZTL/DataversePolicyEnforcement`
-
-If you want, I can scaffold the `CustomApi` project layout and a minimal Web API controller that forwards calls to `Core`.
