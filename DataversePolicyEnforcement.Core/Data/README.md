@@ -3,10 +3,10 @@
 This folder contains data access helpers used by the policy engine to read `dpe_PolicyRule` and `dpe_PolicyCondition` records from Dataverse.
 
 Key components
-- `PolicyCollection` — implementation of `IPolicyCollection` that queries Dataverse for rules and conditions.
-- `IPolicyCollection` — interface used to decouple data access from evaluation logic and to make testing easier.
- - `IPolicyCollection` — interface used to decouple data access from evaluation logic and to make testing easier.
- - `IMetadataValidator` — interface used to validate that entities and attributes exist in Dataverse metadata. Implementations (for example `MetadataValidator`) call the Dataverse metadata messages and return a boolean indicating whether the target entity/attribute(s) exist. Implementations also perform argument validation and handle service exceptions by returning false.
+- `PolicyCollection` â€” implementation of `IPolicyCollection` that queries Dataverse for rules and conditions.
+- `IPolicyCollection` â€” interface used to decouple data access from evaluation logic and to make testing easier.
+ - `IPolicyCollection` â€” interface used to decouple data access from evaluation logic and to make testing easier.
+ - `IMetadataValidator` â€” interface used to validate that entities and attributes exist in Dataverse metadata. Implementations (for example `MetadataValidator`) call the Dataverse metadata messages and return a boolean indicating whether the target entity/attribute(s) exist. Implementations also perform argument validation and handle service exceptions by returning false.
 
 Policy Collection behavior
 - `GetRules(service, entityLogicalName, attributeLogicalName)` validates arguments, returns only active `dpe_PolicyRule` records that match the entity/attribute, ordered by `dpe_Sequence` ascending.
