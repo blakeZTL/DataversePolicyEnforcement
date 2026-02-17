@@ -75,7 +75,7 @@ namespace DataversePolicyEnforcement.Plugins
                 }
                 tracer.Trace($"Governed attributes: {governedAttributes.Count}");
 
-                var evaluator = new PolicyEvaluator(policyCollection);
+                var evaluator = new PolicyEvaluator(systemService, policyCollection);
 
                 foreach (var attr in governedAttributes)
                 {
@@ -90,7 +90,6 @@ namespace DataversePolicyEnforcement.Plugins
                     {
                         tracer.Trace("Evaluating in context of an update message");
                         var decision = evaluator.EvaluateAttribute(
-                            systemService,
                             target.LogicalName,
                             attr,
                             target,
@@ -131,7 +130,6 @@ namespace DataversePolicyEnforcement.Plugins
                     {
                         tracer.Trace("Evaluating in context of a create message");
                         var decision = evaluator.EvaluateAttribute(
-                            systemService,
                             target.LogicalName,
                             attr,
                             target,

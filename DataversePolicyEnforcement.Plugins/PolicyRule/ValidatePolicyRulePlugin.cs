@@ -1,5 +1,5 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
-using DataversePolicyEnforcement.Models.Entities;
+using DataversePolicyEnforcement.Models;
 using Microsoft.Xrm.Sdk;
 using System.Collections.Generic;
 
@@ -155,8 +155,8 @@ namespace DataversePolicyEnforcement.Plugins.PolicyRule
             #region Validate Scope
 
             if (
-                policyRule.dpe_PolicyType == Models.OptionSets.dpe_policytype.Visible
-                && policyRule.dpe_Scope == Models.OptionSets.dpe_policyscope.ServerOnly
+                policyRule.dpe_PolicyType == dpe_policytype.Visible
+                && policyRule.dpe_Scope == dpe_policyscope.ServerOnly
             )
             {
                 throw new InvalidPluginExecutionException(
