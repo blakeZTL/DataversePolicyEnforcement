@@ -138,7 +138,6 @@
     <Compile Include="Core\Data\PolicyCollectionTests.cs" />
     <Compile Include="CustomApi\GetAttributeDecisions\DPE_GetAttributeDecisionsTests.cs" />
     <Compile Include="CustomApi\FakeMessageExecutors\DPE_GetAttributeDecisionFakeMessageExecutor.cs" />
-    <Compile Include="CustomApi\Models\AttributeDecisionInputParametersTests.cs" />
     <Compile Include="Helpers\ConditionHelpers.cs" />
     <Compile Include="Core\Evaluation\PolicyEvaluatorTests.cs" />
     <Compile Include="Core\Evaluation\PolicyScopeEvaluatorTests.cs" />
@@ -177,6 +176,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CustomApi\Models\" />
     <Folder Include="Plugins\PolicyCondition\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
