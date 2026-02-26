@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Text.Json;
 
 namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
