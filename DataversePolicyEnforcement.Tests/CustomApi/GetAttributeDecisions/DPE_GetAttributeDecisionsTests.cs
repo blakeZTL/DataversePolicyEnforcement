@@ -1,8 +1,10 @@
 ﻿using DataversePolicyEnforcement.CustomApi.Models;
 using DataversePolicyEnforcement.Models;
 using DataversePolicyEnforcement.Tests.Helpers;
+using FakeXrmEasy.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Linq;
 using System.Text.Json;
@@ -17,6 +19,7 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         ConditionHelpers _conditionHelpers;
         dpe_PolicyCondition _metCondition;
         dpe_PolicyCondition _notMetCondition;
+        EntityMetadata _entityMetadata;
 
         public DPE_GetAttributeDecisionsTests()
         {
@@ -55,20 +58,49 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
             };
 
             _conditionHelpers = new ConditionHelpers(_context, _metCondition, _notMetCondition);
+
+            _entityMetadata = new EntityMetadata
+            {
+                LogicalName = _rule.dpe_TargetEntityLogicalName
+            };
         }
 
         [TestMethod]
         [TestCategory("RequestValidation")]
-        public void ValidRequest_ReturnsDecisions()
+        [DataRow("test", AttributeTypeCode.String)]
+        [DataRow("0", AttributeTypeCode.Integer)]
+        [DataRow("0", AttributeTypeCode.Picklist)]
+        [DataRow(null, AttributeTypeCode.Lookup)]
+        public void ValidRequest_ReturnsDecisions(string value, AttributeTypeCode code)
         {
-            _request.dpe_gad_triggercurrentvalue_string = "test";
+            if (code == AttributeTypeCode.Lookup)
+            {
+                _request.dpe_gad_triggercurrentvalue_lookup_logicalname = "account";
+                value = Guid.NewGuid().ToString();
+
+                LookupAttributeMetadata lookupMetadata = new LookupAttributeMetadata
+                {
+                    LogicalName = _rule.dpe_TriggerAttributeLogicalName,
+                    Targets = new string[] { "account" }
+                };
+                _entityMetadata.SetAttribute(lookupMetadata);
+            }
+            else
+            {
+                var attribute = new AttributeMetadata
+                {
+                    LogicalName = _rule.dpe_TriggerAttributeLogicalName
+                };
+                attribute.SetSealedPropertyValue("AttributeType", code);
+                _entityMetadata.SetAttribute(attribute);
+            }
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = value;
 
             var response = _service.Execute(_request) as dpe_GetAttributeDecisionsResponse;
             Assert.IsNotNull(response);
-
-            _request.dpe_gad_triggercurrentvalue_string = null;
-            _request.dpe_gad_triggercurrentvalue_lookupid = Guid.NewGuid().ToString();
-            _request.dpe_gad_triggercurrentvalue_lookup_logicalname = "account";
 
             response = _service.Execute(_request) as dpe_GetAttributeDecisionsResponse;
             Assert.IsNotNull(response);
@@ -78,15 +110,23 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("RequestValidation")]
         public void InvalidRequest_ThrowsError()
         {
-            _request.dpe_gad_triggercurrentvalue_string = "test";
-            _request.dpe_gad_triggercurrentvalue_int = 1; // multiple trigger values set - invalid
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.Integer);
+            _entityMetadata.SetAttribute(attribute);
+
+            _request.dpe_gad_trigger_currentvalue = "test";
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
 
             var error = Assert.ThrowsException<InvalidPluginExecutionException>(
                 () => _service.Execute(_request)
             );
 
             Assert.AreEqual(
-                "Invalid request: exactly one trigger current value must be provided.",
+                "Invalid request. Ensure current value can convert to correct type",
                 error.Message
             );
         }
@@ -95,8 +135,17 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("String")]
         public void String_FoundMatchingRule_ReturnsDecisions()
         {
-            _request.dpe_gad_triggercurrentvalue_string = "test";
-            _metCondition.dpe_ValueString = _request.dpe_gad_triggercurrentvalue_string;
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.String);
+            _entityMetadata.SetAttribute(attribute);
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = "test";
+            _metCondition.dpe_ValueString = _request.dpe_gad_trigger_currentvalue;
             _metCondition.dpe_ValueType = dpe_policyconditionvaluetype.String;
             _conditionHelpers.AddConditionToRule(_rule);
 
@@ -134,7 +183,16 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("String")]
         public void String_NoMatchingRule_ReturnsDecisions()
         {
-            _request.dpe_gad_triggercurrentvalue_string = "test";
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.String);
+            _entityMetadata.SetAttribute(attribute);
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = "test";
             _notMetCondition.dpe_ValueType = dpe_policyconditionvaluetype.String;
             _notMetCondition.dpe_ValueString = "not_value";
             _conditionHelpers.AddConditionToRule(_rule, met: false);
@@ -173,8 +231,17 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("Int")]
         public void Int_FoundMatchingRule_ReturnsDecisions()
         {
-            _request.dpe_gad_triggercurrentvalue_int = 1;
-            _metCondition.dpe_ValueWholeNumber = _request.dpe_gad_triggercurrentvalue_int;
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.Integer);
+            _entityMetadata.SetAttribute(attribute);
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = "1";
+            _metCondition.dpe_ValueWholeNumber = int.Parse(_request.dpe_gad_trigger_currentvalue);
             _metCondition.dpe_ValueType = dpe_policyconditionvaluetype.WholeNumber;
             _conditionHelpers.AddConditionToRule(_rule);
 
@@ -212,7 +279,16 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("Int")]
         public void Int_NoMatchingRule_ReturnsDecisions()
         {
-            _request.dpe_gad_triggercurrentvalue_int = 1;
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.Integer);
+            _entityMetadata.SetAttribute(attribute);
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = "1";
             _notMetCondition.dpe_ValueWholeNumber = 2;
             _notMetCondition.dpe_ValueType = dpe_policyconditionvaluetype.WholeNumber;
             _conditionHelpers.AddConditionToRule(_rule, met: false);
@@ -251,9 +327,19 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("OptionSet")]
         public void OptionSet_FoundMatchingRule_ReturnsDecisions()
         {
-            _request.dpe_gad_triggercurrentvalue_optionsetvalue = 1;
-            _metCondition.dpe_ValueOptionSetValue =
-                _request.dpe_gad_triggercurrentvalue_optionsetvalue;
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.Picklist);
+            _entityMetadata.SetAttribute(attribute);
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = "1";
+            _metCondition.dpe_ValueOptionSetValue = int.Parse(
+                _request.dpe_gad_trigger_currentvalue
+            );
             _metCondition.dpe_ValueType = dpe_policyconditionvaluetype.OptionSet;
             _conditionHelpers.AddConditionToRule(_rule);
 
@@ -291,7 +377,16 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("OptionSet")]
         public void OptionSet_NoMatchingRule_ReturnsDecisions()
         {
-            _request.dpe_gad_triggercurrentvalue_optionsetvalue = 1;
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.Picklist);
+            _entityMetadata.SetAttribute(attribute);
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = "1";
             _notMetCondition.dpe_ValueOptionSetValue = 2;
             _notMetCondition.dpe_ValueType = dpe_policyconditionvaluetype.OptionSet;
             _conditionHelpers.AddConditionToRule(_rule, met: false);
@@ -330,9 +425,18 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("Lookup")]
         public void Lookup_FoundMatchingRule_ReturnsDecisions()
         {
-            _request.dpe_gad_triggercurrentvalue_lookupid = Guid.NewGuid().ToString();
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.Lookup);
+            _entityMetadata.SetAttribute(attribute);
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = Guid.NewGuid().ToString();
             _request.dpe_gad_triggercurrentvalue_lookup_logicalname = "account";
-            _metCondition.dpe_ValueLookupId = _request.dpe_gad_triggercurrentvalue_lookupid;
+            _metCondition.dpe_ValueLookupId = _request.dpe_gad_trigger_currentvalue;
             _metCondition.dpe_ValueLookupLogicalName =
                 _request.dpe_gad_triggercurrentvalue_lookup_logicalname;
             _metCondition.dpe_ValueType = dpe_policyconditionvaluetype.Lookup;
@@ -372,7 +476,16 @@ namespace DataversePolicyEnforcement.Tests.CustomApi.GetAttributeDecisions
         [TestCategory("Lookup")]
         public void Lookup_NoMatchingRule_ReturnsDecisions()
         {
-            _request.dpe_gad_triggercurrentvalue_lookupid = Guid.NewGuid().ToString();
+            var attribute = new AttributeMetadata
+            {
+                LogicalName = _rule.dpe_TriggerAttributeLogicalName
+            };
+            attribute.SetSealedPropertyValue("AttributeType", AttributeTypeCode.Lookup);
+            _entityMetadata.SetAttribute(attribute);
+
+            _context.InitializeMetadata(new EntityMetadata[] { _entityMetadata });
+
+            _request.dpe_gad_trigger_currentvalue = Guid.NewGuid().ToString();
             _request.dpe_gad_triggercurrentvalue_lookup_logicalname = "account";
             _notMetCondition.dpe_ValueLookupId = Guid.NewGuid().ToString();
             _notMetCondition.dpe_ValueLookupLogicalName =
