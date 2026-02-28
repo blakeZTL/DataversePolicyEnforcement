@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dpe.snk" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataversePolicyEnforcement.Core\DataversePolicyEnforcement.Core.csproj">

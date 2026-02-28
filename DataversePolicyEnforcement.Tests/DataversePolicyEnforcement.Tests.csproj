@@ -153,6 +153,7 @@
     <None Include="Core\Data\README.md" />
     <None Include="Core\Evaluation\README.md" />
     <None Include="Core\README.md" />
+    <None Include="CustomApi\README.md" />
     <None Include="packages.config" />
     <None Include="Plugins\Helpers\README.md" />
     <None Include="Plugins\PolicyRule\README.md" />
