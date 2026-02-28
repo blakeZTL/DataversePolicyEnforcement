@@ -14,12 +14,33 @@ export class PolicyService implements IPolicyService {
     currentValue: any,
     attributeLogicalNames: string[],
   ): Promise<AttributePolicyDecision[]> {
+    console.debug(
+      "PolicyService: Getting attribute decisions for entity",
+      entityLogicalName,
+      triggerAttributeLogicalName,
+      currentValue,
+      attributeLogicalNames,
+    );
+
+    let valueForApi: string;
+    let lookupEntityName: string | null = null;
+
+    if (Array.isArray(currentValue)) {
+      const lookupValues = currentValue as Xrm.LookupValue[];
+      const firstValue = lookupValues[0];
+      valueForApi = firstValue?.id || "";
+      lookupEntityName = firstValue?.entityType || null;
+    } else {
+      valueForApi = String(currentValue);
+    }
+
     var execute_dpe_GetAttributeDecisions_Request = {
       // Parameters
       dpe_gad_entitylogicalname: entityLogicalName, // Edm.String
       dpe_gad_targetattributelogicalnames: attributeLogicalNames, // Collection(Edm.String)
       dpe_gad_triggerattributelogicalname: triggerAttributeLogicalName, // Edm.String
-      dpe_gad_trigger_currentvalue: String(currentValue), // Edm.String
+      dpe_gad_trigger_currentvalue: valueForApi, // Edm.String
+      dpe_gad_triggercurrentvalue_lookup_logicalname: lookupEntityName, // Edm.String
 
       getMetadata: function () {
         return {
@@ -40,12 +61,21 @@ export class PolicyService implements IPolicyService {
               typeName: "Edm.String",
               structuralProperty: 1,
             },
+            dpe_gad_triggercurrentvalue_lookup_logicalname: {
+              typeName: "Edm.String",
+              structuralProperty: 1,
+            },
           },
           operationType: 0, // Action
           operationName: "dpe_GetAttributeDecisions",
         };
       },
     };
+
+    console.debug(
+      "PolicyService: Executing request for attribute decisions",
+      execute_dpe_GetAttributeDecisions_Request,
+    );
 
     var response = await this._xrmWebApi.online.execute(
       execute_dpe_GetAttributeDecisions_Request,
