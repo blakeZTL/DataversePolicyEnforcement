@@ -57,6 +57,25 @@ namespace DataversePolicyEnforcement.Models
 			}
 		}
 		
+		public string dpe_gad_trigger_currentvalue
+		{
+			get
+			{
+				if (this.Parameters.Contains("dpe_gad_trigger_currentvalue"))
+				{
+					return ((string)(this.Parameters["dpe_gad_trigger_currentvalue"]));
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+			set
+			{
+				this.Parameters["dpe_gad_trigger_currentvalue"] = value;
+			}
+		}
+		
 		public string dpe_gad_triggerattributelogicalname
 		{
 			get
@@ -73,25 +92,6 @@ namespace DataversePolicyEnforcement.Models
 			set
 			{
 				this.Parameters["dpe_gad_triggerattributelogicalname"] = value;
-			}
-		}
-		
-		public int dpe_gad_triggercurrentvalue_int
-		{
-			get
-			{
-				if (this.Parameters.Contains("dpe_gad_triggercurrentvalue_int"))
-				{
-					return ((int)(this.Parameters["dpe_gad_triggercurrentvalue_int"]));
-				}
-				else
-				{
-					return default(int);
-				}
-			}
-			set
-			{
-				this.Parameters["dpe_gad_triggercurrentvalue_int"] = value;
 			}
 		}
 		
@@ -114,68 +114,12 @@ namespace DataversePolicyEnforcement.Models
 			}
 		}
 		
-		public string dpe_gad_triggercurrentvalue_lookupid
-		{
-			get
-			{
-				if (this.Parameters.Contains("dpe_gad_triggercurrentvalue_lookupid"))
-				{
-					return ((string)(this.Parameters["dpe_gad_triggercurrentvalue_lookupid"]));
-				}
-				else
-				{
-					return default(string);
-				}
-			}
-			set
-			{
-				this.Parameters["dpe_gad_triggercurrentvalue_lookupid"] = value;
-			}
-		}
-		
-		public int dpe_gad_triggercurrentvalue_optionsetvalue
-		{
-			get
-			{
-				if (this.Parameters.Contains("dpe_gad_triggercurrentvalue_optionsetvalue"))
-				{
-					return ((int)(this.Parameters["dpe_gad_triggercurrentvalue_optionsetvalue"]));
-				}
-				else
-				{
-					return default(int);
-				}
-			}
-			set
-			{
-				this.Parameters["dpe_gad_triggercurrentvalue_optionsetvalue"] = value;
-			}
-		}
-		
-		public string dpe_gad_triggercurrentvalue_string
-		{
-			get
-			{
-				if (this.Parameters.Contains("dpe_gad_triggercurrentvalue_string"))
-				{
-					return ((string)(this.Parameters["dpe_gad_triggercurrentvalue_string"]));
-				}
-				else
-				{
-					return default(string);
-				}
-			}
-			set
-			{
-				this.Parameters["dpe_gad_triggercurrentvalue_string"] = value;
-			}
-		}
-		
 		public dpe_GetAttributeDecisionsRequest()
 		{
 			this.RequestName = "dpe_GetAttributeDecisions";
 			this.dpe_gad_entitylogicalname = default(string);
 			this.dpe_gad_targetattributelogicalnames = default(string[]);
+			this.dpe_gad_trigger_currentvalue = default(string);
 			this.dpe_gad_triggerattributelogicalname = default(string);
 		}
 	}
