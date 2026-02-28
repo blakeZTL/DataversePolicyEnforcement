@@ -8,9 +8,9 @@ namespace DataversePolicyEnforcement.CustomApi.Helpers
 {
     public class MetadataHelper
     {
-        private dpe_GetAttributeDecisionsRequest _request;
-        private IOrganizationService _service;
-        private ITracingService _tracer;
+        private readonly dpe_GetAttributeDecisionsRequest _request;
+        private readonly IOrganizationService _service;
+        private readonly ITracingService _tracer;
 
         public MetadataHelper(
             dpe_GetAttributeDecisionsRequest req,
@@ -46,7 +46,9 @@ namespace DataversePolicyEnforcement.CustomApi.Helpers
             }
 
             var attributeMetadata = GetAttributeMetadata();
-
+            _tracer.Trace(
+                $"Parsing attribute value for attribute type: {attributeMetadata.AttributeType}"
+            );
             switch (attributeMetadata.AttributeType)
             {
                 case AttributeTypeCode.Lookup:
@@ -113,7 +115,7 @@ namespace DataversePolicyEnforcement.CustomApi.Helpers
             return response;
         }
 
-        private OptionSetValue ParseOptionValue()
+        private int ParseOptionValue()
         {
             if (!int.TryParse(_request.dpe_gad_trigger_currentvalue, out int optionValue))
             {
@@ -125,7 +127,7 @@ namespace DataversePolicyEnforcement.CustomApi.Helpers
                 );
             }
             _tracer.Trace($"Parsed option set value: {optionValue}");
-            return new OptionSetValue(optionValue);
+            return optionValue;
         }
     }
 }
