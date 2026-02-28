@@ -1,5 +1,6 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
 using DataversePolicyEnforcement.Core.Evaluation;
+using DataversePolicyEnforcement.CustomApi.Helpers;
 using DataversePolicyEnforcement.CustomApi.Models;
 using DataversePolicyEnforcement.Models;
 using Microsoft.Xrm.Sdk;
@@ -30,9 +31,14 @@ namespace DataversePolicyEnforcement.CustomApi
                 var req = new dpe_GetAttributeDecisionsRequest();
 
                 foreach (var kvp in context.InputParameters)
-                    req.Parameters[kvp.Key] = kvp.Value;
+                {
+                    req[kvp.Key] = kvp.Value;
+                }
 
-                if (!RequestIsValid(req, tracer, out Entity validEntity) || validEntity == null)
+                if (
+                    !RequestIsValid(req, systemService, tracer, out Entity validEntity)
+                    || validEntity == null
+                )
                 {
                     throw new InvalidPluginExecutionException(
                         "Invalid request: exactly one trigger current value must be provided."
@@ -75,60 +81,35 @@ namespace DataversePolicyEnforcement.CustomApi
         }
 
         private bool RequestIsValid(
-            dpe_GetAttributeDecisionsRequest request,
+            dpe_GetAttributeDecisionsRequest req,
+            IOrganizationService service,
             ITracingService tracer,
             out Entity validEntity
         )
         {
             validEntity = null;
-            if (request == null)
+            if (req == null)
                 return false;
 
-            double providedCount = 0;
-            validEntity = new Entity(request.dpe_gad_entitylogicalname);
-            EntityReference lookupValue = null;
-
-            foreach (var kvp in request.Parameters)
+            var metadataHelper = new MetadataHelper(req, service, tracer);
+            object value;
+            try
             {
-                if (kvp.Key.StartsWith("dpe_gad_triggercurrentvalue_lookup") && kvp.Value != null)
-                {
-                    providedCount += .5;
-                    if (lookupValue == null)
-                    {
-                        lookupValue = new EntityReference();
-                    }
-                }
-                else if (kvp.Key.StartsWith("dpe_gad_triggercurrentvalue") && kvp.Value != null)
-                {
-                    providedCount++;
-                    validEntity[request.dpe_gad_triggerattributelogicalname] = kvp.Value;
-                }
-                else
-                    continue;
-
-                tracer.Trace("Found trigger current value: {0} = {1}", kvp.Key, kvp.Value);
+                value = metadataHelper.ParseAttributeValue();
             }
-
-            if (lookupValue != null)
+            catch (Exception ex)
             {
-                lookupValue.LogicalName = request.dpe_gad_triggercurrentvalue_lookup_logicalname;
-                lookupValue.Id = Guid.Parse(request.dpe_gad_triggercurrentvalue_lookupid);
-                validEntity[request.dpe_gad_triggerattributelogicalname] = lookupValue;
-                tracer.Trace(
-                    "Constructed lookup value for trigger current value: {0} ({1})",
-                    lookupValue.Id,
-                    lookupValue.LogicalName
-                );
+                tracer.Trace($"Request invalid: {ex.Message}", ex);
+                return false;
             }
+            validEntity = new Entity(req.dpe_gad_entitylogicalname);
 
-            var isValid = providedCount == 1;
+            tracer.Trace(
+                $"Request valid. Setting {req.dpe_gad_triggerattributelogicalname} to {value}"
+            );
+            validEntity[req.dpe_gad_triggerattributelogicalname] = value;
 
-            if (!isValid)
-            {
-                validEntity = null;
-            }
-
-            return isValid;
+            return true;
         }
     }
 }
