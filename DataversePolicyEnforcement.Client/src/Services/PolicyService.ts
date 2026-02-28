@@ -51,46 +51,52 @@ export class PolicyService implements IPolicyService {
       execute_dpe_GetAttributeDecisions_Request,
     );
 
-    if (response.ok) {
-      var result = await response.json();
-      console.debug("Policy Service Result:", result);
-      return result[
-        "dpe_gad_attributedecision_results"
-      ] as AttributePolicyDecision[];
+    if (!response.ok) {
+      throw new Error("Failed to retrieve attribute policy decisions.");
     }
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     resolve([
-    //       {
-    //         attributeLogicalName: attributeLogicalNames[0],
-    //         triggerAttributeLogicalName: triggerAttributeLogicalName,
-    //         policyDetails: {
-    //           visible: true,
-    //           required: false,
-    //           notAllowed: false,
-    //         },
-    //       },
-    //     ]);
-    //   }, 250);
-    // });
-  }
 
-  async getDecisionsAsync(
-    entityLogicalName: string,
-    attributeLogicalName: string,
-  ): Promise<AttributePolicyDecision[]> {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const result = await response.json();
+    console.debug("Policy Service Result:", result);
 
-    return [
-      {
-        attributeLogicalName: attributeLogicalName,
-        triggerAttributeLogicalName: "triggerAttribute",
-        policyDetails: {
-          visible: true,
-          required: false,
-          notAllowed: false,
-        },
+    const raw = result["dpe_gad_attributedecision_results"];
+
+    // Handles both: already-array and JSON-string payloads
+    const parsed: any[] =
+      typeof raw === "string" ? JSON.parse(raw) : Array.isArray(raw) ? raw : [];
+
+    return parsed.map((d) => ({
+      attributeLogicalName: d.AttributeLogicalName ?? d.attributeLogicalName,
+      triggerAttributeLogicalName:
+        d.TriggerAttributeLogicalName ?? d.triggerAttributeLogicalName,
+      policyDetails: {
+        visible:
+          d.ClientPolicyDetails?.Visible ?? d.policyDetails?.visible ?? true,
+        required:
+          d.ClientPolicyDetails?.Required ?? d.policyDetails?.required ?? false,
+        notAllowed:
+          d.ClientPolicyDetails?.NotAllowed ??
+          d.policyDetails?.notAllowed ??
+          false,
       },
-    ];
+    }));
   }
+
+  // async getDecisionsAsync(
+  //   entityLogicalName: string,
+  //   attributeLogicalName: string,
+  // ): Promise<AttributePolicyDecision[]> {
+  //   await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  //   return [
+  //     {
+  //       attributeLogicalName: attributeLogicalName,
+  //       triggerAttributeLogicalName: "triggerAttribute",
+  //       policyDetails: {
+  //         visible: true,
+  //         required: false,
+  //         notAllowed: false,
+  //       },
+  //     },
+  //   ];
+  // }
 }
