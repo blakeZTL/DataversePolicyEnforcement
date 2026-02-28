@@ -36,6 +36,10 @@ namespace DataversePolicyEnforcement.Core.Evaluation
             var requiredSet = false;
             var notAllowedSet = false;
 
+            Debug.WriteLine(
+                $"{nameof(EvaluateClientScope)}: Evaluating client scope for {target.LogicalName}. Rules count: {rules.Count}"
+            );
+
             foreach (var rule in rules.OrderBy(r => r.dpe_Sequence))
             {
                 if (visibleSet && requiredSet && notAllowedSet)

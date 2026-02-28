@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace DataversePolicyEnforcement.Core.Comparison
@@ -12,7 +13,9 @@ namespace DataversePolicyEnforcement.Core.Comparison
         {
             if (condition == null || value == null)
                 return false;
-
+            Debug.WriteLine(
+                $"{nameof(ConditionValueEquals)}: Condition Value Type of {condition.dpe_ValueType.Value} comparing against value of {value}"
+            );
             try
             {
                 switch (condition.dpe_ValueType)
