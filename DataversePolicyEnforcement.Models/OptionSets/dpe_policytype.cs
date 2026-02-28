@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataversePolicyEnforcement.Models.OptionSets
+namespace DataversePolicyEnforcement.Models
 {
 	
 	

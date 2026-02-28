@@ -1,4 +1,4 @@
-﻿using DataversePolicyEnforcement.Models.Entities;
+﻿using DataversePolicyEnforcement.Models;
 using FakeXrmEasy.Abstractions;
 using FakeXrmEasy.Extensions;
 

@@ -1,9 +1,11 @@
-﻿using FakeXrmEasy.Abstractions;
+﻿using DataversePolicyEnforcement.Tests.CustomApi.FakeMessageExecutors;
+using FakeXrmEasy.Abstractions;
 using FakeXrmEasy.Abstractions.Enums;
 using FakeXrmEasy.FakeMessageExecutors;
 using FakeXrmEasy.Middleware;
 using FakeXrmEasy.Middleware.Crud;
 using FakeXrmEasy.Middleware.Messages;
+using FakeXrmEasy.Plugins.Middleware.CustomApis;
 using Microsoft.Xrm.Sdk;
 using System.Reflection;
 
@@ -22,11 +24,9 @@ namespace DataversePolicyEnforcement.Tests
                 .AddFakeMessageExecutors(
                     Assembly.GetAssembly(typeof(AddListMembersListRequestExecutor))
                 )
-                //.AddCustomApiFakeMessageExecutors(
-                //    Assembly.GetAssembly(
-                //        typeof(CustomApiSetTraineeWeekAndShiftStatusFakeMessageExecutor)
-                //    )
-                //)
+                .AddCustomApiFakeMessageExecutors(
+                    Assembly.GetAssembly(typeof(DPE_GetAttributeDecisionFakeMessageExecutor))
+                )
                 .UseCrud()
                 .UseMessages()
                 .SetLicense(FakeXrmEasyLicense.RPL_1_5)

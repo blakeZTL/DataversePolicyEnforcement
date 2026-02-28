@@ -1,7 +1,7 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
 using DataversePolicyEnforcement.Core.Evaluation;
 using DataversePolicyEnforcement.Core.Model;
-using DataversePolicyEnforcement.Models.Entities;
+using DataversePolicyEnforcement.Models;
 using DataversePolicyEnforcement.Tests.Helpers;
 using FakeXrmEasy.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -42,7 +42,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.Required,
+                dpe_PolicyType = dpe_policytype.Required,
                 dpe_Sequence = 1,
                 dpe_Result = true,
                 statecode = dpe_policyrule_statecode.Active
@@ -55,7 +55,7 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.NotAllowed,
+                dpe_PolicyType = dpe_policytype.NotAllowed,
                 dpe_Sequence = 3,
                 dpe_Result = true,
                 statecode = dpe_policyrule_statecode.Active
@@ -67,16 +67,16 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
             _metCondition = new dpe_PolicyCondition
             {
                 Id = Guid.NewGuid(),
-                dpe_Operator = Models.OptionSets.dpe_policyconditionoperator.Equals,
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_Operator = dpe_policyconditionoperator.Equals,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = _target["trigger"].ToString(),
                 statecode = dpe_policycondition_statecode.Active
             };
             _notMetCondition = new dpe_PolicyCondition
             {
                 Id = Guid.NewGuid(),
-                dpe_Operator = Models.OptionSets.dpe_policyconditionoperator.Equals,
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_Operator = dpe_policyconditionoperator.Equals,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = "not_value",
                 statecode = dpe_policycondition_statecode.Active
             };
@@ -105,8 +105,8 @@ namespace DataversePolicyEnforcement.Tests.Core.Evaluation
                 dpe_TargetEntityLogicalName = "account",
                 dpe_TargetAttributeLogicalName = "name",
                 dpe_TriggerAttributeLogicalName = "trigger",
-                dpe_PolicyType = Models.OptionSets.dpe_policytype.Visible,
-                dpe_Scope = Models.OptionSets.dpe_policyscope.FormOnly,
+                dpe_PolicyType = dpe_policytype.Visible,
+                dpe_Scope = dpe_policyscope.FormOnly,
                 dpe_Sequence = 1,
                 dpe_Result = false,
                 statecode = dpe_policyrule_statecode.Active

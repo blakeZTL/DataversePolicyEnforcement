@@ -9,9 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using DataversePolicyEnforcement.Models.OptionSets;
-
-namespace DataversePolicyEnforcement.Models.Entities
+namespace DataversePolicyEnforcement.Models
 {
 	
 	
@@ -810,16 +808,16 @@ namespace DataversePolicyEnforcement.Models.Entities
 		/// 1:N dpe_policycondition_PolicyRuleId_dpe_policyrule
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dpe_policycondition_PolicyRuleId_dpe_policyrule")]
-		public System.Collections.Generic.IEnumerable<DataversePolicyEnforcement.Models.Entities.dpe_PolicyCondition> dpe_policycondition_PolicyRuleId_dpe_policyrule
+		public System.Collections.Generic.IEnumerable<DataversePolicyEnforcement.Models.dpe_PolicyCondition> dpe_policycondition_PolicyRuleId_dpe_policyrule
 		{
 			get
 			{
-				return this.GetRelatedEntities<DataversePolicyEnforcement.Models.Entities.dpe_PolicyCondition>("dpe_policycondition_PolicyRuleId_dpe_policyrule", null);
+				return this.GetRelatedEntities<DataversePolicyEnforcement.Models.dpe_PolicyCondition>("dpe_policycondition_PolicyRuleId_dpe_policyrule", null);
 			}
 			set
 			{
 				this.OnPropertyChanging("dpe_policycondition_PolicyRuleId_dpe_policyrule");
-				this.SetRelatedEntities<DataversePolicyEnforcement.Models.Entities.dpe_PolicyCondition>("dpe_policycondition_PolicyRuleId_dpe_policyrule", null, value);
+				this.SetRelatedEntities<DataversePolicyEnforcement.Models.dpe_PolicyCondition>("dpe_policycondition_PolicyRuleId_dpe_policyrule", null, value);
 				this.OnPropertyChanged("dpe_policycondition_PolicyRuleId_dpe_policyrule");
 			}
 		}

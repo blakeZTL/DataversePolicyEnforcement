@@ -98,6 +98,7 @@
     <Compile Include="Entities\dpe_policycondition.cs" />
     <Compile Include="Entities\dpe_policyrule.cs" />
     <Compile Include="EntityOptionSetEnum.cs" />
+    <Compile Include="Messages\dpe_GetAttributeDecisions.cs" />
     <Compile Include="OptionSets\dpe_policyconditioncompare.cs" />
     <Compile Include="OptionSets\dpe_policyconditionoperator.cs" />
     <Compile Include="OptionSets\dpe_policyconditionvaluetype.cs" />

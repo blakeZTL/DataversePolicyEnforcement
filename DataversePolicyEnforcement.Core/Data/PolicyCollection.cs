@@ -1,4 +1,4 @@
-﻿using DataversePolicyEnforcement.Models.Entities;
+﻿using DataversePolicyEnforcement.Models;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;

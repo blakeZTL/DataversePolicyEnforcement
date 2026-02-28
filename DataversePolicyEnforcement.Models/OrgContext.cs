@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using DataversePolicyEnforcement.Models.Entities;
+[assembly: Microsoft.Xrm.Sdk.Client.ProxyTypesAssemblyAttribute()]
 
 namespace DataversePolicyEnforcement.Models
 {
@@ -31,24 +31,24 @@ namespace DataversePolicyEnforcement.Models
 		}
 		
 		/// <summary>
-		/// Gets a binding to the set of all <see cref="DataversePolicyEnforcement.Model.dpe_PolicyCondition"/> entities.
+		/// Gets a binding to the set of all <see cref="DataversePolicyEnforcement.Models.dpe_PolicyCondition"/> entities.
 		/// </summary>
-		public System.Linq.IQueryable<DataversePolicyEnforcement.Models.Entities.dpe_PolicyCondition> dpe_PolicyConditionSet
+		public System.Linq.IQueryable<DataversePolicyEnforcement.Models.dpe_PolicyCondition> dpe_PolicyConditionSet
 		{
 			get
 			{
-				return this.CreateQuery<DataversePolicyEnforcement.Models.Entities.dpe_PolicyCondition>();
+				return this.CreateQuery<DataversePolicyEnforcement.Models.dpe_PolicyCondition>();
 			}
 		}
 		
 		/// <summary>
-		/// Gets a binding to the set of all <see cref="DataversePolicyEnforcement.Model.dpe_PolicyRule"/> entities.
+		/// Gets a binding to the set of all <see cref="DataversePolicyEnforcement.Models.dpe_PolicyRule"/> entities.
 		/// </summary>
-		public System.Linq.IQueryable<DataversePolicyEnforcement.Models.Entities.dpe_PolicyRule> dpe_PolicyRuleSet
+		public System.Linq.IQueryable<DataversePolicyEnforcement.Models.dpe_PolicyRule> dpe_PolicyRuleSet
 		{
 			get
 			{
-				return this.CreateQuery<DataversePolicyEnforcement.Models.Entities.dpe_PolicyRule>();
+				return this.CreateQuery<DataversePolicyEnforcement.Models.dpe_PolicyRule>();
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 ﻿using DataversePolicyEnforcement.Core.Comparison;
+using DataversePolicyEnforcement.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -16,9 +17,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_NullValue_ReturnsFalse()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = "TestValue"
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, null));
@@ -27,9 +28,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_UnsupportedValueType_ReturnsFalse()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = (Models.OptionSets.dpe_policyconditionvaluetype)999 // Invalid enum value
+                dpe_ValueType = (dpe_policyconditionvaluetype)999 // Invalid enum value
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, "AnyValue"));
         }
@@ -37,9 +38,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_String_Match()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = "TestValue"
             };
             Assert.IsTrue(Condition.ConditionValueEquals(condition, "TestValue"));
@@ -48,9 +49,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_String_NoMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = "TestValue"
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, "AnotherValue"));
@@ -59,9 +60,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_WholeNumber_Match()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.WholeNumber,
+                dpe_ValueType = dpe_policyconditionvaluetype.WholeNumber,
                 dpe_ValueWholeNumber = 42
             };
             Assert.IsTrue(Condition.ConditionValueEquals(condition, 42));
@@ -70,9 +71,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_WholeNumber_NoMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.WholeNumber,
+                dpe_ValueType = dpe_policyconditionvaluetype.WholeNumber,
                 dpe_ValueWholeNumber = 42
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, 43));
@@ -81,9 +82,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Boolean_Match()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Boolean,
+                dpe_ValueType = dpe_policyconditionvaluetype.Boolean,
                 dpe_ValueBoolean = true
             };
             Assert.IsTrue(Condition.ConditionValueEquals(condition, true));
@@ -92,9 +93,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Boolean_NoMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Boolean,
+                dpe_ValueType = dpe_policyconditionvaluetype.Boolean,
                 dpe_ValueBoolean = true
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, false));
@@ -104,9 +105,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         public void ConditionValueEquals_DateTime_Match()
         {
             var date = new DateTime(2024, 1, 1);
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.DateTime,
+                dpe_ValueType = dpe_policyconditionvaluetype.DateTime,
                 dpe_ValueDateTime = date
             };
             Assert.IsTrue(Condition.ConditionValueEquals(condition, date));
@@ -115,9 +116,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_DateTime_NoMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.DateTime,
+                dpe_ValueType = dpe_policyconditionvaluetype.DateTime,
                 dpe_ValueDateTime = new DateTime(2024, 1, 1)
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, new DateTime(2024, 1, 2)));
@@ -127,9 +128,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         public void ConditionValueEquals_Guid_Match()
         {
             var guid = System.Guid.NewGuid();
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Guid,
+                dpe_ValueType = dpe_policyconditionvaluetype.Guid,
                 dpe_ValueGuid = guid.ToString()
             };
             Assert.IsTrue(Condition.ConditionValueEquals(condition, guid));
@@ -138,9 +139,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Guid_NoMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Guid,
+                dpe_ValueType = dpe_policyconditionvaluetype.Guid,
                 dpe_ValueGuid = System.Guid.NewGuid().ToString()
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, System.Guid.NewGuid()));
@@ -150,9 +151,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         public void ConditionValueEquals_Money_Match()
         {
             var money = new Microsoft.Xrm.Sdk.Money(100);
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Money,
+                dpe_ValueType = dpe_policyconditionvaluetype.Money,
                 dpe_ValueMoney = money
             };
             Assert.IsTrue(Condition.ConditionValueEquals(condition, money));
@@ -161,9 +162,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Money_NoMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Money,
+                dpe_ValueType = dpe_policyconditionvaluetype.Money,
                 dpe_ValueMoney = new Microsoft.Xrm.Sdk.Money(100)
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, 101));
@@ -172,9 +173,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_OptionSet_Match()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.OptionSet,
+                dpe_ValueType = dpe_policyconditionvaluetype.OptionSet,
                 dpe_ValueOptionSetValue = 1
             };
             Assert.IsTrue(Condition.ConditionValueEquals(condition, 1));
@@ -183,9 +184,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_OptionSet_NoMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.OptionSet,
+                dpe_ValueType = dpe_policyconditionvaluetype.OptionSet,
                 dpe_ValueOptionSetValue = 1
             };
             Assert.IsFalse(Condition.ConditionValueEquals(condition, 2));
@@ -194,9 +195,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Lookup_Match()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Lookup,
+                dpe_ValueType = dpe_policyconditionvaluetype.Lookup,
                 dpe_ValueLookupLogicalName = "account",
                 dpe_ValueLookupId = Guid.NewGuid().ToString()
             };
@@ -210,9 +211,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Lookup_NoMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Lookup,
+                dpe_ValueType = dpe_policyconditionvaluetype.Lookup,
                 dpe_ValueLookupLogicalName = "account",
                 dpe_ValueLookupId = Guid.NewGuid().ToString()
             };
@@ -226,9 +227,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Lookup_WrongLogicalName_ReturnsFalse()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Lookup,
+                dpe_ValueType = dpe_policyconditionvaluetype.Lookup,
                 dpe_ValueLookupLogicalName = "account",
                 dpe_ValueLookupId = Guid.NewGuid().ToString()
             };
@@ -239,9 +240,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Lookup_NullLogicalName_ReturnsFalse()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Lookup,
+                dpe_ValueType = dpe_policyconditionvaluetype.Lookup,
                 dpe_ValueLookupLogicalName = null,
                 dpe_ValueLookupId = Guid.NewGuid().ToString()
             };
@@ -255,9 +256,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Lookup_NullId_ReturnsFalse()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Lookup,
+                dpe_ValueType = dpe_policyconditionvaluetype.Lookup,
                 dpe_ValueLookupLogicalName = "account",
                 dpe_ValueLookupId = null
             };
@@ -271,9 +272,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Lookup_NullValue_ReturnsFalse()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Lookup,
+                dpe_ValueType = dpe_policyconditionvaluetype.Lookup,
                 dpe_ValueLookupLogicalName = "account",
                 dpe_ValueLookupId = Guid.NewGuid().ToString()
             };
@@ -283,9 +284,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_Lookup_WrongType_ReturnsFalse()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.Lookup,
+                dpe_ValueType = dpe_policyconditionvaluetype.Lookup,
                 dpe_ValueLookupLogicalName = "account",
                 dpe_ValueLookupId = Guid.NewGuid().ToString()
             };
@@ -295,9 +296,9 @@ namespace DataversePolicyEnforcement.Tests.Core.Comparison
         [TestMethod]
         public void ConditionValueEquals_String_CaseInsensitiveMatch()
         {
-            var condition = new Models.Entities.dpe_PolicyCondition
+            var condition = new dpe_PolicyCondition
             {
-                dpe_ValueType = Models.OptionSets.dpe_policyconditionvaluetype.String,
+                dpe_ValueType = dpe_policyconditionvaluetype.String,
                 dpe_ValueString = "TestValue"
             };
             Assert.IsTrue(Condition.ConditionValueEquals(condition, "testvalue"));

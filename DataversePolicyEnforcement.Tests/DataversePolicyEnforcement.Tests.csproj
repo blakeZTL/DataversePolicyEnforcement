@@ -136,6 +136,8 @@
     <Compile Include="Core\Comparison\ConditionTests.cs" />
     <Compile Include="Core\Data\MetadataValidatorTests.cs" />
     <Compile Include="Core\Data\PolicyCollectionTests.cs" />
+    <Compile Include="CustomApi\GetAttributeDecisions\DPE_GetAttributeDecisionsTests.cs" />
+    <Compile Include="CustomApi\FakeMessageExecutors\DPE_GetAttributeDecisionFakeMessageExecutor.cs" />
     <Compile Include="Helpers\ConditionHelpers.cs" />
     <Compile Include="Core\Evaluation\PolicyEvaluatorTests.cs" />
     <Compile Include="Core\Evaluation\PolicyScopeEvaluatorTests.cs" />
@@ -160,6 +162,10 @@
       <Project>{338ec228-19b6-4e04-8124-0eeb99884886}</Project>
       <Name>DataversePolicyEnforcement.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataversePolicyEnforcement.CustomApi\DataversePolicyEnforcement.CustomApi.csproj">
+      <Project>{06fb04bd-6f76-4f72-9a2f-3510181e8cc4}</Project>
+      <Name>DataversePolicyEnforcement.CustomApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataversePolicyEnforcement.Models\DataversePolicyEnforcement.Models.csproj">
       <Project>{ffba5cb4-f326-4dea-bccb-7f0cf229fa1c}</Project>
       <Name>DataversePolicyEnforcement.Models</Name>
@@ -170,6 +176,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CustomApi\Models\" />
     <Folder Include="Plugins\PolicyCondition\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

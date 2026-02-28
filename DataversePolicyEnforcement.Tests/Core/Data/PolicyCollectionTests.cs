@@ -1,5 +1,5 @@
 ﻿using DataversePolicyEnforcement.Core.Data;
-using DataversePolicyEnforcement.Models.Entities;
+using DataversePolicyEnforcement.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
