@@ -41,7 +41,7 @@ namespace DataversePolicyEnforcement.CustomApi
                 )
                 {
                     throw new InvalidPluginExecutionException(
-                        "Invalid request: exactly one trigger current value must be provided."
+                        "Invalid request. Ensure current value can convert to correct type"
                     );
                 }
 
